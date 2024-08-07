@@ -44,7 +44,6 @@ app.whenReady().then(() => {
     });
 
     ipcMain.on('command', (event, command) => {
-        console.log('c');
         wss.clients.forEach((ws) => {
             ws.send(JSON.stringify({
                 header: {
