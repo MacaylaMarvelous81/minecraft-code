@@ -597,6 +597,17 @@ export const toolbox = {
             ],
         },
         {
+            kind: 'category',
+            name: 'Agent',
+            colour: 351,
+            contents: [
+                {
+                    kind: 'block',
+                    type: 'agent_create'
+                }
+            ]
+        },
+        {
             kind: 'sep',
         },
         {
