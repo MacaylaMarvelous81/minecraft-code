@@ -1,6 +1,6 @@
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'node:path';
-import { sendQueue } from '../server/server.js';
+import { sendQueue } from './server.js';
 import crypto from 'node:crypto';
 
 function createWindow() {

@@ -2,10 +2,10 @@ import path from 'node:path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
-    entry: path.resolve(import.meta.dirname, 'blockly-app/wwwsrc/index.js'),
+    entry: path.resolve(import.meta.dirname, 'wwwsrc/index.js'),
     output: {
         filename: 'bundle.js',
-        path: path.resolve(import.meta.dirname, 'blockly-app/wwwdist')
+        path: path.resolve(import.meta.dirname, 'wwwdist')
     },
     module: {
         rules: [
@@ -27,7 +27,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(import.meta.dirname, 'blockly-app/wwwsrc/index.html')
+            template: path.resolve(import.meta.dirname, 'wwwsrc/index.html')
         })
     ],
     resolve: {
