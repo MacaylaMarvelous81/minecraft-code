@@ -32,7 +32,11 @@ module.exports = {
     ],
     resolve: {
         alias: {
-            blockly: path.resolve(__dirname, 'node_modules/blockly')
+            blockly: path.resolve(__dirname, 'node_modules/blockly'),
+            'js-interpreter': path.resolve(__dirname, 'node_modules/js-interpreter')
+        },
+        fallback: {
+            vm: false
         }
     }
 }
