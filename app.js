@@ -1,3 +1,3 @@
-const { startApp } = require('./blockly-app/window.js')
+import { startApp } from './blockly-app/window.js';
 
 startApp();

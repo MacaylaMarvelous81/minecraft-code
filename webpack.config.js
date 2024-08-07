@@ -1,11 +1,11 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'node:path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
-    entry: path.resolve(__dirname, 'blockly-app/wwwsrc/index.js'),
+export default {
+    entry: path.resolve(import.meta.dirname, 'blockly-app/wwwsrc/index.js'),
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'blockly-app/wwwdist')
+        path: path.resolve(import.meta.dirname, 'blockly-app/wwwdist')
     },
     module: {
         rules: [
@@ -27,13 +27,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'blockly-app/wwwsrc/index.html')
+            template: path.resolve(import.meta.dirname, 'blockly-app/wwwsrc/index.html')
         })
     ],
     resolve: {
         alias: {
-            blockly: path.resolve(__dirname, 'node_modules/blockly'),
-            'js-interpreter': path.resolve(__dirname, 'node_modules/js-interpreter')
+            blockly: path.resolve(import.meta.dirname, 'node_modules/blockly'),
+            'js-interpreter': path.resolve(import.meta.dirname, 'node_modules/js-interpreter')
         },
         fallback: {
             vm: false

@@ -1,11 +1,11 @@
 import * as Blockly from 'blockly';
-import { agentBlocks } from './blocks/agent';
-import { playerBlocks } from './blocks/player';
+import { agentBlocks } from './blocks/agent.js';
+import { playerBlocks } from './blocks/player.js';
 import { javascriptGenerator } from 'blockly/javascript';
-import { javascriptBlocks } from './generators/javascript';
-import { toolbox } from './toolbox';
+import { javascriptBlocks } from './generators/javascript.js';
+import { toolbox } from './toolbox.js';
 import Interpreter from 'js-interpreter';
-import { agent } from './api/agent';
+import { agent } from './api/agent.js';
 import './index.css';
 
 Blockly.common.defineBlocks(agentBlocks);

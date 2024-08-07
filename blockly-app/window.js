@@ -1,5 +1,5 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+import { app, BrowserWindow } from 'electron';
+import path from 'node:path';
 
 function createWindow() {
     const window = new BrowserWindow({
@@ -7,10 +7,10 @@ function createWindow() {
         height: 600
     });
 
-    window.loadFile(path.resolve(__dirname, 'wwwdist/index.html'));
+    window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
 }
 
-function startApp() {
+export function startApp() {
     app.whenReady().then(() => {
         createWindow();
     
@@ -23,7 +23,3 @@ function startApp() {
         if (process.platform !== 'darwin') app.quit();
     });
 }
-
-module.exports = {
-    startApp
-};
