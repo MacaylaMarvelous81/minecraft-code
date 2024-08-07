@@ -11,6 +11,9 @@ importers:
       blockly:
         specifier: ^11.1.1
         version: 11.1.1
+      fifo:
+        specifier: ^2.4.1
+        version: 2.4.1
       get-port:
         specifier: ^7.1.0
         version: 7.1.0
@@ -1122,6 +1125,9 @@ packages:
 
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
+
+  fifo@2.4.1:
+    resolution: {integrity: sha512-XTbUCNmo54Jav0hcL6VxDuY4x1eCQH61HEF80C2Oww283pfjQ2C8avZeyq4v43sW2S2403kmzssE9j4lbF66Sg==}
 
   find-cache-dir@4.0.0:
     resolution: {integrity: sha512-9ZonPT4ZAK4a+1pUPVPZJapbi7O5qbbJPdYw/NOQWZZbVLdDTYM3A4R9z/DpAM08IDaFGsvPgiGZ82WEwUDWjg==}
@@ -3211,6 +3217,8 @@ snapshots:
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
+
+  fifo@2.4.1: {}
 
   find-cache-dir@4.0.0:
     dependencies:

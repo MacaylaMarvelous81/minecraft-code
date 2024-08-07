@@ -1,6 +1,9 @@
+import fifo from 'fifo';
 import { WebSocketServer } from 'ws';
 import getPort, { portNumbers } from 'get-port';
 import crypto from 'node:crypto';
+
+export const sendQueue = fifo();
 
 function generateKeyPromise() {
     return new Promise((resolve, reject) => {
@@ -34,4 +37,18 @@ export async function startServer() {
             console.log(`recieved ${ data }`);
         });
     });
+
+    function handleQueue() {
+        const message = sendQueue.shift();
+
+        if (message) {
+            wss.clients.forEach((ws) => {
+                ws.send(message);
+            })
+        }
+
+        setTimeout(handleQueue, 0);
+    }
+
+    handleQueue();
 }
