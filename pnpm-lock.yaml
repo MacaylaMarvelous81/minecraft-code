@@ -11,9 +11,15 @@ importers:
       blockly:
         specifier: ^11.1.1
         version: 11.1.1
+      get-port:
+        specifier: ^7.1.0
+        version: 7.1.0
       js-interpreter:
         specifier: ^5.1.2
         version: 5.1.2
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.0
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -1151,6 +1157,10 @@ packages:
   get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
     engines: {node: '>= 0.4'}
+
+  get-port@7.1.0:
+    resolution: {integrity: sha512-QB9NKEeDg3xxVwCCwJQ9+xycaz6pBB6iQ76wiWMl1927n0Kir6alPiP+yuiICLLU4jpMe08dXfpebuQppFA2zw==}
+    engines: {node: '>=16'}
 
   get-stream@5.2.0:
     resolution: {integrity: sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==}
@@ -3243,6 +3253,8 @@ snapshots:
       has-symbols: 1.0.3
       hasown: 2.0.2
     optional: true
+
+  get-port@7.1.0: {}
 
   get-stream@5.2.0:
     dependencies:
