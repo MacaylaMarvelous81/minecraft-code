@@ -603,7 +603,30 @@ export const toolbox = {
             contents: [
                 {
                     kind: 'block',
-                    type: 'agent_create'
+                    type: 'agent_teleport'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_position'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_move'
+                }
+            ]
+        },
+        {
+            kind: 'category',
+            name: 'Player',
+            colour: 210,
+            contents: [
+                {
+                    kind: 'block',
+                    type: 'player_teleport'
+                },
+                {
+                    kind: 'block',
+                    type: 'player_position'
                 }
             ]
         },
