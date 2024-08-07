@@ -24,14 +24,6 @@ const key = await new Promise((resolve, reject) => {
     })
 });
 
-wss.on('connection', (ws) => {
-    console.log('connection established');
-
-    ws.on('message', (data) => {
-        console.log(`recieved ${ data }`);
-    });
-});
-
 function createWindow() {
     const window = new BrowserWindow({
         width: 800,
@@ -49,6 +41,27 @@ app.whenReady().then(() => {
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+
+    ipcMain.on('command', (event, command) => {
+        console.log('c');
+        wss.clients.forEach((ws) => {
+            ws.send(JSON.stringify({
+                header: {
+                    version: 1,
+                    requestId: crypto.randomUUID(),
+                    messagePurpose: 'commandRequest',
+                    messageType: 'commandRequest'
+                },
+                body: {
+                    version: 1,
+                    commandLine: command,
+                    origin: {
+                        type: 'player'
+                    }
+                }
+            }));
+        })
     });
 });
 
