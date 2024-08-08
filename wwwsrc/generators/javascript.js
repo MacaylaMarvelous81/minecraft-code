@@ -15,7 +15,7 @@ export const javascriptBlocks = {
     agent_position(block, generator) {
         const axis = block.getFieldValue('AXIS');
 
-        return [ `agent.position.${ axis.toLowerCase() }`, Order.MEMBER ];
+        return [ `agent.getPosition('${ axis }')`, Order.FUNCTION_CALL ];
     },
     agent_move(block, generator) {
         const direction = block.getFieldValue('DIRECTION');

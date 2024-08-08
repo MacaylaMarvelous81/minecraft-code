@@ -20,11 +20,11 @@ runButton.addEventListener('click', () => {
     if (workspace.isDragging()) return;
 
     const code = javascriptGenerator.workspaceToCode(workspace);
+    console.log("Generated code", code);
+
     const interpreter = new Interpreter(code, (initInterpreter, globalObject) => {
         initInterpreter.setProperty(globalObject, 'agent', initInterpreter.nativeToPseudo(agent));
     });
-
-    console.log(code);
 
     function step() {
         if (interpreter.step()) window.setTimeout(step, 0);

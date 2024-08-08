@@ -3,6 +3,9 @@ import { WebSocketServer } from 'ws';
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'node:path';
 import crypto from "node:crypto";
+import { buildCommandRequest } from './mcws.js';
+
+const commandRequests = {};
 
 const port = await getPort({
     port: portNumbers(49152, 65535)
@@ -11,6 +14,26 @@ const wss = new WebSocketServer({
     port
 });
 console.log(`Server started on port ${ port }`);
+
+wss.on('connection', (ws) => {
+    if (wss.clients.size > 1) ws.close();
+
+    ws.on('message', (message) => {
+        try {
+            const data = JSON.parse(message);
+
+            if (data?.header?.messagePurpose === 'commandResponse' && data?.header?.requestId in commandRequests) {
+                commandRequests[data?.header?.requestId](data?.body);
+
+                delete commandRequests[data?.header?.requestId];
+            }
+        } catch (err) {
+            if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
+
+            console.error('Unknown error occurred handling a message.', err);
+        }
+    });
+});
 
 const key = await new Promise((resolve, reject) => {
     crypto.generateKeyPair('ec', {
@@ -45,22 +68,20 @@ app.whenReady().then(() => {
 
     ipcMain.on('command', (event, command) => {
         wss.clients.forEach((ws) => {
-            ws.send(JSON.stringify({
-                header: {
-                    version: 1,
-                    requestId: crypto.randomUUID(),
-                    messagePurpose: 'commandRequest',
-                    messageType: 'commandRequest'
-                },
-                body: {
-                    version: 1,
-                    commandLine: command,
-                    origin: {
-                        type: 'player'
-                    }
-                }
-            }));
-        })
+            ws.send(JSON.stringify(buildCommandRequest(command, crypto.randomUUID())));
+        });
+    });
+
+    ipcMain.handle('command-with-response', (event, command) => {
+        return new Promise((resolve, reject) => {
+            wss.clients.forEach((ws) => {
+                const id = crypto.randomUUID();
+
+                commandRequests[id] = (result) => resolve(result);
+
+                ws.send(JSON.stringify(buildCommandRequest(command, id)));
+            });
+        });
     });
 });
 
