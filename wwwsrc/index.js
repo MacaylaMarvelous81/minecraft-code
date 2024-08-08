@@ -6,6 +6,7 @@ import { javascriptBlocks } from './generators/javascript.js';
 import { toolbox } from './toolbox.js';
 import Interpreter from 'js-interpreter';
 import { agent } from './api/agent.js';
+import { player } from './api/player.js';
 import './index.css';
 
 Blockly.common.defineBlocks(agentBlocks);
@@ -24,6 +25,7 @@ runButton.addEventListener('click', () => {
 
     const interpreter = new Interpreter(code, (initInterpreter, globalObject) => {
         initInterpreter.setProperty(globalObject, 'agent', initInterpreter.nativeToPseudo(agent));
+        initInterpreter.setProperty(globalObject, 'player', initInterpreter.nativeToPseudo(player));
     });
 
     function step() {

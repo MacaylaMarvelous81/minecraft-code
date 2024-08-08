@@ -22,5 +22,21 @@ export const javascriptBlocks = {
         const blocks = generator.valueToCode(block, 'BLOCKS', Order.NONE);
 
         return `agent.move('${ direction }', ${ blocks });\n`;
+    },
+    player_teleport(block, generator) {
+        const xValue = generator.valueToCode(block, 'X', Order.NONE);
+        const yValue = generator.valueToCode(block, 'Y', Order.NONE);
+        const zValue = generator.valueToCode(block, 'Z', Order.NONE);
+
+        const outX = xValue === '' ? 'null' : xValue;
+        const outY = yValue === '' ? 'null' : yValue;
+        const outZ = zValue === '' ? 'null' : zValue;
+
+        return `player.teleport(${ outX }, ${ outY }, ${ outZ });\n`;
+    },
+    player_position(block, generator) {
+        const axis = block.getFieldValue('AXIS');
+
+        return [ `player.getPosition(${ axis })`, Order.FUNCTION_CALL ];
     }
 };
