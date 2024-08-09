@@ -1,6 +1,13 @@
 import { Order } from 'blockly/javascript';
 
 export const javascriptBlocks = {
+    math_coordinate(block, generator) {
+        const x = generator.valueToCode(block, 'X', Order.NONE);
+        const y = generator.valueToCode(block, 'Y', Order.NONE);
+        const z = generator.valueToCode(block, 'Z', Order.NONE);
+
+        return `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`;
+    },
     agent_teleport(block, generator) {
         const xValue = generator.valueToCode(block, 'X', Order.NONE);
         const yValue = generator.valueToCode(block, 'Y', Order.NONE);
