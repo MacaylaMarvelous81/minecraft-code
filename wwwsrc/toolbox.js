@@ -346,6 +346,17 @@ export const toolbox = {
                             }
                         }
                     }
+                },
+                {
+                    kind: 'block',
+                    type: 'math_coordinate_value',
+                    inputs: {
+                        COORDINATE: {
+                            shadow: {
+                                type: 'math_coordinate'
+                            }
+                        }
+                    }
                 }
             ],
         },

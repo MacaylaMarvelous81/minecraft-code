@@ -6,7 +6,14 @@ export const javascriptBlocks = {
         const y = generator.valueToCode(block, 'Y', Order.NONE);
         const z = generator.valueToCode(block, 'Z', Order.NONE);
 
-        return `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`;
+        // Is Order.NONE right here if I'm using object syntax?
+        return [ `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`, Order.NONE ];
+    },
+    math_coordinate_value(block, generator) {
+        const axis = block.getFieldValue('AXIS');
+        const coordinate = generator.valueToCode(block, 'COORDINATE', Order.NONE);
+
+        return [ `${ coordinate }.${ axis.toLowerCase() }`, Order.MEMBER ];
     },
     agent_teleport(block, generator) {
         const xValue = generator.valueToCode(block, 'X', Order.NONE);

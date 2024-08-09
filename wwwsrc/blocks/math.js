@@ -21,8 +21,32 @@ export const mathBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
                 check: 'Number'
             }
         ],
+        inputsInline: true,
         style: 'math_blocks',
         output: 'Coordinate',
         tooltip: 'A coordinate in 3D space.'
+    },
+    {
+        type: 'math_coordinate_value',
+        message0: 'value of %1 in %2',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'AXIS',
+                options: [
+                    [ 'x', 'X' ],
+                    [ 'y', 'Y' ],
+                    [ 'z', 'Z' ]
+                ]
+            },
+            {
+                type: 'input_value',
+                name: 'COORDINATE',
+                check: 'Coordinate'
+            }
+        ],
+        style: 'math_blocks',
+        output: 'Number',
+        tooltip: 'Gets the value of an axis in a coordinate.'
     }
 ]);
