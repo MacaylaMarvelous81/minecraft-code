@@ -13,6 +13,18 @@ export function buildAgent(interpreter) {
             minecraft.runCommand(`agent move ${ direction }`);
         }
     }));
+    interpreter.setProperty(agent, 'turn', interpreter.createNativeFunction((direction) => {
+        minecraft.runCommand(`agent turn ${ direction }`);
+    }));
+    interpreter.setProperty(agent, 'attack', interpreter.createNativeFunction((direction) => {
+        minecraft.runCommand(`agent attack ${ direction }`);
+    }));
+    interpreter.setProperty(agent, 'destroy', interpreter.createNativeFunction((direction) => {
+        minecraft.runCommand(`agent destroy ${ direction }`);
+    }));
+    interpreter.setProperty(agent, 'drop', interpreter.createNativeFunction((slot, amount, direction) => {
+        minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
+    }));
 
     return agent;
 }

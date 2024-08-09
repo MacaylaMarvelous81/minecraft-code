@@ -659,7 +659,51 @@ export const toolbox = {
                 },
                 {
                     kind: 'block',
-                    type: 'agent_move'
+                    type: 'agent_move',
+                    inputs: {
+                        BLOCKS: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_turn'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_attack'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_destroy'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_drop',
+                    inputs: {
+                        AMOUNT: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        },
+                        SLOT: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        }
+                    }
                 }
             ]
         },

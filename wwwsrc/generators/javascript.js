@@ -31,6 +31,28 @@ export const javascriptBlocks = {
 
         return `agent.move('${ direction }', ${ blocks });\n`;
     },
+    agent_turn(block, generator) {
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.turn('${ direction }');\n`;
+    },
+    agent_attack(block, generator) {
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.attack('${ direction }');\n`;
+    },
+    agent_destroy(block, generator) {
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.destroy('${ direction }');\n`;
+    },
+    agent_drop(block, generator) {
+        const amount = generator.valueToCode(block, 'AMOUNT', Order.NONE);
+        const slot = generator.valueToCode(block, 'SLOT', Order.NONE);
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
+    },
     player_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 

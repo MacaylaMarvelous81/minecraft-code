@@ -49,5 +49,99 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         nextStatement: null,
         previousStatement: null,
         tooltip: 'Move your Agent in a direction for a number of blocks.'
+    },
+    {
+        type: 'agent_turn',
+        message0: 'turn agent %1',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: [
+                    [ 'left', 'LEFT' ],
+                    [ 'right', 'RIGHT']
+                ]
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Turn your Agent from the direction it is facing left or right.'
+    },
+    {
+        type: 'agent_attack',
+        message0: 'make agent attack %1',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: [
+                    [ 'forward', 'FORWARD' ],
+                    [ 'back', 'BACK' ],
+                    [ 'left', 'LEFT' ],
+                    [ 'right', 'RIGHT' ],
+                    [ 'up', 'UP' ],
+                    [ 'down', 'DOWN' ]
+                ]
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Make your Agent attack in a direction.'
+    },
+    {
+        type: 'agent_destroy',
+        message0: 'make agent destroy block %1',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: [
+                    [ 'forward', 'FORWARD' ],
+                    [ 'back', 'BACK' ],
+                    [ 'left', 'LEFT' ],
+                    [ 'right', 'RIGHT' ],
+                    [ 'up', 'UP' ],
+                    [ 'down', 'DOWN' ]
+                ]
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Make your Agent destroy a block in a direction.'
+    },
+    {
+        type: 'agent_drop',
+        message0: 'drop %1 items from slot %2 from agent inventory %3',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'AMOUNT',
+                check: 'Number'
+            },
+            {
+                type: 'input_value',
+                name: 'SLOT',
+                check: 'Number'
+            },
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: [
+                    [ 'forward', 'FORWARD' ],
+                    [ 'back', 'BACK' ],
+                    [ 'left', 'LEFT' ],
+                    [ 'right', 'RIGHT' ],
+                    [ 'up', 'UP' ],
+                    [ 'down', 'DOWN' ]
+                ]
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Drop items from the inventory of your Agent in a direction.'
     }
 ]);
