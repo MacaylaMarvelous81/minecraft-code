@@ -37,6 +37,6 @@ export const javascriptBlocks = {
     player_position(block, generator) {
         const axis = block.getFieldValue('AXIS');
 
-        return [ `player.getPosition(${ axis })`, Order.FUNCTION_CALL ];
+        return [ `player.getPosition('${ axis }')`, Order.FUNCTION_CALL ];
     }
 };

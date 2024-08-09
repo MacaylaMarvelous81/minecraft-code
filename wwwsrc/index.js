@@ -5,8 +5,8 @@ import { javascriptGenerator } from 'blockly/javascript';
 import { javascriptBlocks } from './generators/javascript.js';
 import { toolbox } from './toolbox.js';
 import Interpreter from 'js-interpreter';
-import { agent } from './api/agent.js';
-import { player } from './api/player.js';
+import { buildAgent } from './api/agent.js';
+import { buildPlayer } from './api/player.js';
 import './index.css';
 
 Blockly.common.defineBlocks(agentBlocks);
@@ -24,8 +24,8 @@ runButton.addEventListener('click', () => {
     console.log("Generated code", code);
 
     const interpreter = new Interpreter(code, (initInterpreter, globalObject) => {
-        initInterpreter.setProperty(globalObject, 'agent', initInterpreter.nativeToPseudo(agent));
-        initInterpreter.setProperty(globalObject, 'player', initInterpreter.nativeToPseudo(player));
+        initInterpreter.setProperty(globalObject, 'agent', buildAgent(initInterpreter));
+        initInterpreter.setProperty(globalObject, 'player', buildPlayer(initInterpreter));
     });
 
     function step() {

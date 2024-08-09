@@ -1,9 +1,18 @@
-export const player = {
-    teleport(x, y, z) {
+export function buildPlayer(interpreter) {
+    const player = interpreter.nativeToPseudo({});
+
+    interpreter.setProperty(player, 'teleport', interpreter.createNativeFunction((x, y, z) => {
         minecraft.runCommand(`tp ${ x || '~' } ${ y || '~' } ${ z || '~' }`);
-    },
-    async getPosition(axis) {
-        console.log(await minecraft.runCommandWithResponse('querytarget @s'));
-        return 0;
-    }
-};
+    }));
+    interpreter.setProperty(player, 'getPosition', interpreter.createAsyncFunction((axis, callback) => {
+        minecraft.runCommandWithResponse('querytarget @s').then((body) => {
+            // @s selects a single target, the executor of the command. There should be exactly one entity with details
+            // if the command succeeded.
+            const playerDetails = JSON.parse(body.details)[0];
+
+            callback(playerDetails.position[axis.toLowerCase()]);
+        });
+    }));
+
+    return player;
+}
