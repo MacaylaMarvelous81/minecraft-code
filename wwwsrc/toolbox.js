@@ -639,6 +639,17 @@ export const toolbox = {
         },
         {
             kind: 'category',
+            name: 'Lifecycle',
+            colour: 60,
+            contents: [
+                {
+                    kind: 'block',
+                    type: 'lifecycle_run'
+                }
+            ]
+        },
+        {
+            kind: 'category',
             name: 'Agent',
             colour: 351,
             contents: [

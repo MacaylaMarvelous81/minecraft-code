@@ -2,6 +2,7 @@ import vex from 'vex-js';
 import vexDialog from 'vex-dialog';
 import * as Blockly from 'blockly';
 import { mathBlocks } from './blocks/math.js';
+import { lifecycleBlocks } from './blocks/lifecycle.js';
 import { agentBlocks } from './blocks/agent.js';
 import { playerBlocks } from './blocks/player.js';
 import { javascriptGenerator } from 'blockly/javascript';
@@ -33,12 +34,15 @@ Blockly.dialog.setPrompt((message, defaultValue, callback) => {
 });
 
 Blockly.common.defineBlocks(mathBlocks);
+Blockly.common.defineBlocks(lifecycleBlocks);
 Blockly.common.defineBlocks(agentBlocks);
 Blockly.common.defineBlocks(playerBlocks);
 Object.assign(javascriptGenerator.forBlock, javascriptBlocks);
 
 const blocklyContainer = document.getElementById('blockly');
 const workspace = Blockly.inject(blocklyContainer, { toolbox });
+
+workspace.addChangeListener(Blockly.Events.disableOrphans);
 
 const runButton = document.getElementById('run-button');
 runButton.addEventListener('click', () => {

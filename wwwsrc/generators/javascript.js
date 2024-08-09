@@ -11,6 +11,10 @@ export const javascriptBlocks = {
         // coordinates should turn them pseudo so that all coordinates are consistently pseudo.
         return [ `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`, Order.NONE ];
     },
+    lifecycle_run(block, generator) {
+        // Code inserted at top level
+        return generator.statementToCode(block, 'DO');
+    },
     math_coordinate_value(block, generator) {
         const axis = block.getFieldValue('AXIS');
         const coordinate = generator.valueToCode(block, 'COORDINATE', Order.NONE);
