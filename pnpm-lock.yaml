@@ -17,6 +17,12 @@ importers:
       js-interpreter:
         specifier: ^5.1.2
         version: 5.1.2
+      vex-dialog:
+        specifier: ^1.1.0
+        version: 1.1.0
+      vex-js:
+        specifier: ^4.1.0
+        version: 4.1.0
       ws:
         specifier: ^8.18.0
         version: 8.18.0
@@ -887,6 +893,9 @@ packages:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
 
+  classlist-polyfill@1.2.0:
+    resolution: {integrity: sha512-GzIjNdcEtH4ieA2S8NmrSxv7DfEV5fmixQeyTmqmRmRJPGpRBaSnA2a0VrCjyT8iW8JjEdMbKzDotAJf+ajgaQ==}
+
   clean-css@5.3.3:
     resolution: {integrity: sha512-D5J+kHaVb/wKSFcyyV75uCn8fiY4sV38XJoe4CUyGQ+mOU/fMVYUdH1hJC+CJQ5uY3EnW27SbJYS4X8BiLrAFg==}
     engines: {node: '>= 10.0'}
@@ -983,6 +992,9 @@ packages:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
     engines: {node: '>=10'}
 
+  deep-clone-simple@1.1.1:
+    resolution: {integrity: sha512-d/Knd6Cmq0hQTdTf5uggLD0ua6zpwGb1Yqorz3Y8NAmcAMKsG/UmV8+iaNqgT92WPFD7EDymwGIwwVy888T6fQ==}
+
   defer-to-connect@2.0.1:
     resolution: {integrity: sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==}
     engines: {node: '>=10'}
@@ -1014,6 +1026,9 @@ packages:
   domhandler@4.3.1:
     resolution: {integrity: sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==}
     engines: {node: '>= 4'}
+
+  domify@1.4.0:
+    resolution: {integrity: sha512-CBzequt8IJiKV8fav4tn0qA9KSiZ76w3C2EkyfC8+df6UGNcZJRfvfBcRzLW39eGeETcunkOvvRBj/gKXIdULw==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -1065,6 +1080,9 @@ packages:
 
   es6-error@4.1.1:
     resolution: {integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==}
+
+  es6-object-assign@1.1.0:
+    resolution: {integrity: sha512-MEl9uirslVwqQU369iHNWZXsI8yaZYGg/D65aOgZkeyFJwHYSxilf7rQzXKI7DdDuBPrBXbfk3sl9hJhmd5AUw==}
 
   escalade@3.1.2:
     resolution: {integrity: sha512-ErCHMCae19vR8vQGe50xIsVomy19rg6gFu3+r3jkEO46suLMWBksvVyoGgQV+jOfl84ZSOSlmv6Gxa89PmTGmA==}
@@ -1142,6 +1160,9 @@ packages:
   form-data@4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
     engines: {node: '>= 6'}
+
+  form-serialize@0.7.1:
+    resolution: {integrity: sha512-WGThlbRC1ELTwfR4HGLFnUBU3yzaOmiZ1ZbPgic3XsS3nGTzZdrxOLwsP4kz6QBdy1KAwvoLwN9TJk08mfqxxA==}
 
   fs-extra@8.1.0:
     resolution: {integrity: sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==}
@@ -1809,6 +1830,12 @@ packages:
 
   utila@0.4.0:
     resolution: {integrity: sha512-Z0DbgELS9/L/75wZbro8xAnT50pBVFQZ+hUEueGDU5FN51YSCYM+jdxsfCiHjwNP/4LCDD0i/graKpeBnOXKRA==}
+
+  vex-dialog@1.1.0:
+    resolution: {integrity: sha512-P+kf+LMI+jF1QtmH0iaqZLi5sVpL94d29SENBmI3x/2i8a1X6skN6Q2463m1triK8u4bpEWj1FndWqgpueA5cA==}
+
+  vex-js@4.1.0:
+    resolution: {integrity: sha512-n/dgknlD5CVl+Bn87kARnjwSknxZvSMflwzrBdgV0LLdLXpgmF6AKQ//bEEBBwK2JLXR0wG2R+il1zjcBtOi6Q==}
 
   w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
@@ -2988,6 +3015,8 @@ snapshots:
 
   chrome-trace-event@1.0.4: {}
 
+  classlist-polyfill@1.2.0: {}
+
   clean-css@5.3.3:
     dependencies:
       source-map: 0.6.1
@@ -3078,6 +3107,8 @@ snapshots:
     dependencies:
       mimic-response: 3.1.0
 
+  deep-clone-simple@1.1.1: {}
+
   defer-to-connect@2.0.1: {}
 
   define-data-property@1.1.4:
@@ -3114,6 +3145,8 @@ snapshots:
   domhandler@4.3.1:
     dependencies:
       domelementtype: 2.3.0
+
+  domify@1.4.0: {}
 
   domutils@2.8.0:
     dependencies:
@@ -3165,6 +3198,8 @@ snapshots:
 
   es6-error@4.1.1:
     optional: true
+
+  es6-object-assign@1.1.0: {}
 
   escalade@3.1.2: {}
 
@@ -3234,6 +3269,8 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+
+  form-serialize@0.7.1: {}
 
   fs-extra@8.1.0:
     dependencies:
@@ -3882,6 +3919,19 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   utila@0.4.0: {}
+
+  vex-dialog@1.1.0:
+    dependencies:
+      deep-clone-simple: 1.1.1
+      domify: 1.4.0
+      form-serialize: 0.7.1
+
+  vex-js@4.1.0:
+    dependencies:
+      classlist-polyfill: 1.2.0
+      domify: 1.4.0
+      es6-object-assign: 1.1.0
+      vex-dialog: 1.1.0
 
   w3c-xmlserializer@5.0.0:
     dependencies:

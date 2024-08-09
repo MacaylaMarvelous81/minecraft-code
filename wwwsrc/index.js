@@ -1,3 +1,5 @@
+import vex from 'vex-js';
+import vexDialog from 'vex-dialog';
 import * as Blockly from 'blockly';
 import { mathBlocks } from './blocks/math.js';
 import { agentBlocks } from './blocks/agent.js';
@@ -9,6 +11,26 @@ import Interpreter from 'js-interpreter';
 import { buildAgent } from './api/agent.js';
 import { buildPlayer } from './api/player.js';
 import './index.css';
+import 'vex-js/dist/css/vex.css';
+import 'vex-js/dist/css/vex-theme-default.css';
+
+vex.registerPlugin(vexDialog);
+vex.defaultOptions.className = 'vex-theme-default';
+
+Blockly.dialog.setAlert(vex.dialog.alert);
+Blockly.dialog.setConfirm((message, callback) => {
+    vex.dialog.confirm({
+        message,
+        callback: (result) => callback(result)
+    });
+});
+Blockly.dialog.setPrompt((message, defaultValue, callback) => {
+    vex.dialog.prompt({
+        message,
+        placeholder: defaultValue,
+        callback: (result) => callback(result)
+    });
+});
 
 Blockly.common.defineBlocks(mathBlocks);
 Blockly.common.defineBlocks(agentBlocks);
