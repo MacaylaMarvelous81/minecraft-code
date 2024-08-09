@@ -1,7 +1,8 @@
 export function buildPlayer(interpreter) {
     const player = interpreter.nativeToPseudo({});
 
-    interpreter.setProperty(player, 'teleport', interpreter.createNativeFunction((position) => {
+    interpreter.setProperty(player, 'teleport', interpreter.createNativeFunction((pseudoPosition) => {
+        const position = interpreter.pseudoToNative(pseudoPosition);
         minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
     }));
     interpreter.setProperty(player, 'getPosition', interpreter.createAsyncFunction((callback) => {
@@ -10,7 +11,7 @@ export function buildPlayer(interpreter) {
             // if the command succeeded.
             const playerDetails = JSON.parse(body.details)[0];
 
-            callback(playerDetails.position);
+            callback(interpreter.nativeToPseudo(playerDetails.position));
         });
     }));
 

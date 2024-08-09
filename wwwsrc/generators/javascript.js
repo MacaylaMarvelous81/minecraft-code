@@ -7,6 +7,8 @@ export const javascriptBlocks = {
         const z = generator.valueToCode(block, 'Z', Order.NONE);
 
         // Is Order.NONE right here if I'm using object syntax?
+        // Creating an object like this in interpreted space will make a pseudo object. Native functions that return
+        // coordinates should turn them pseudo so that all coordinates are consistently pseudo.
         return [ `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`, Order.NONE ];
     },
     math_coordinate_value(block, generator) {
