@@ -317,6 +317,36 @@ export const toolbox = {
                         },
                     },
                 },
+                {
+                    kind: 'block',
+                    type: 'math_coordinate',
+                    inputs: {
+                        X: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 0
+                                }
+                            }
+                        },
+                        Y: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 0
+                                }
+                            }
+                        },
+                        Z: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 0
+                                }
+                            }
+                        }
+                    }
+                }
             ],
         },
         {

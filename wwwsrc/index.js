@@ -1,4 +1,5 @@
 import * as Blockly from 'blockly';
+import { mathBlocks } from './blocks/math.js';
 import { agentBlocks } from './blocks/agent.js';
 import { playerBlocks } from './blocks/player.js';
 import { javascriptGenerator } from 'blockly/javascript';
@@ -9,6 +10,7 @@ import { buildAgent } from './api/agent.js';
 import { buildPlayer } from './api/player.js';
 import './index.css';
 
+Blockly.common.defineBlocks(mathBlocks);
 Blockly.common.defineBlocks(agentBlocks);
 Blockly.common.defineBlocks(playerBlocks);
 Object.assign(javascriptGenerator.forBlock, javascriptBlocks);
