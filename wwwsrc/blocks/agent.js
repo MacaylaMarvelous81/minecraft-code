@@ -3,24 +3,12 @@ import * as Blockly from 'blockly';
 export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
     {
         type: 'agent_teleport',
-        message0: 'teleport agent to x %1 y %2 z %3',
+        message0: 'teleport agent to %1',
         args0: [
             {
                 type: 'input_value',
-                name: 'X',
-                check: 'Number'
-            },
-            {
-                type: 'input_value',
-                name: 'Y',
-                check: 'Number',
-                align: 'RIGHT'
-            },
-            {
-                type: 'input_value',
-                name: 'Z',
-                check: 'Number',
-                align: 'RIGHT'
+                name: 'POSITION',
+                check: 'Coordinate'
             }
         ],
         colour: 351,
@@ -30,21 +18,10 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
     },
     {
         type: 'agent_position',
-        message0: '%1 position of agent',
-        args0: [
-            {
-                type: 'field_dropdown',
-                name: 'AXIS',
-                options: [
-                    [ 'x', 'X' ],
-                    [ 'y', 'Y' ],
-                    [ 'z', 'Z' ]
-                ]
-            }
-        ],
+        message0: 'position of agent',
         colour: 351,
-        output: 'Number',
-        tooltip: 'Get the position of your Agent in the world on the specified axis.'
+        output: 'Coordinate',
+        tooltip: 'The position of your Agent in the world.'
     },
     {
         type: 'agent_move',

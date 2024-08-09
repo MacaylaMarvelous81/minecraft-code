@@ -644,7 +644,14 @@ export const toolbox = {
             contents: [
                 {
                     kind: 'block',
-                    type: 'agent_teleport'
+                    type: 'agent_teleport',
+                    value: {
+                        POSITION: {
+                            shadow: {
+                                type: 'math_coordinate'
+                            }
+                        }
+                    }
                 },
                 {
                     kind: 'block',
@@ -663,7 +670,14 @@ export const toolbox = {
             contents: [
                 {
                     kind: 'block',
-                    type: 'player_teleport'
+                    type: 'player_teleport',
+                    value: {
+                        POSITION: {
+                            shadow: {
+                                type: 'math_coordinate'
+                            }
+                        }
+                    }
                 },
                 {
                     kind: 'block',

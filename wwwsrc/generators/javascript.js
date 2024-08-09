@@ -16,20 +16,12 @@ export const javascriptBlocks = {
         return [ `${ coordinate }.${ axis.toLowerCase() }`, Order.MEMBER ];
     },
     agent_teleport(block, generator) {
-        const xValue = generator.valueToCode(block, 'X', Order.NONE);
-        const yValue = generator.valueToCode(block, 'Y', Order.NONE);
-        const zValue = generator.valueToCode(block, 'Z', Order.NONE);
+        const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
-        const outX = xValue === '' ? 'null' : xValue;
-        const outY = yValue === '' ? 'null' : yValue;
-        const outZ = zValue === '' ? 'null' : zValue;
-
-        return `agent.teleport(${ outX }, ${ outY }, ${ outZ });\n`;
+        return `agent.teleport(${ position });\n`;
     },
     agent_position(block, generator) {
-        const axis = block.getFieldValue('AXIS');
-
-        return [ `agent.getPosition('${ axis }')`, Order.FUNCTION_CALL ];
+        return [ 'agent.getPosition()', Order.FUNCTION_CALL ];
     },
     agent_move(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
@@ -38,19 +30,11 @@ export const javascriptBlocks = {
         return `agent.move('${ direction }', ${ blocks });\n`;
     },
     player_teleport(block, generator) {
-        const xValue = generator.valueToCode(block, 'X', Order.NONE);
-        const yValue = generator.valueToCode(block, 'Y', Order.NONE);
-        const zValue = generator.valueToCode(block, 'Z', Order.NONE);
+        const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
-        const outX = xValue === '' ? 'null' : xValue;
-        const outY = yValue === '' ? 'null' : yValue;
-        const outZ = zValue === '' ? 'null' : zValue;
-
-        return `player.teleport(${ outX }, ${ outY }, ${ outZ });\n`;
+        return `player.teleport(${ position });\n`;
     },
     player_position(block, generator) {
-        const axis = block.getFieldValue('AXIS');
-
-        return [ `player.getPosition('${ axis }')`, Order.FUNCTION_CALL ];
+        return [ 'player.getPosition()', Order.FUNCTION_CALL ];
     }
 };

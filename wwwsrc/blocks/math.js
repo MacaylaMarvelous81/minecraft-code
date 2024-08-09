@@ -47,6 +47,6 @@ export const mathBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         ],
         style: 'math_blocks',
         output: 'Number',
-        tooltip: 'Gets the value of an axis in a coordinate.'
+        tooltip: 'The value of an axis in a coordinate.'
     }
 ]);
