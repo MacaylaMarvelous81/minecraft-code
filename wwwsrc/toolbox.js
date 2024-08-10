@@ -725,6 +725,10 @@ export const toolbox = {
             contents: [
                 {
                     kind: 'block',
+                    type: 'player_died'
+                },
+                {
+                    kind: 'block',
                     type: 'player_teleport',
                     value: {
                         POSITION: {

@@ -57,6 +57,11 @@ export const javascriptBlocks = {
 
         return `agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
     },
+    player_died(block, generator) {
+        const code = generator.statementToCode(block, 'DO');
+
+        return `player.on('die', () => {\n${ code }\n});\n`;
+    },
     player_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
