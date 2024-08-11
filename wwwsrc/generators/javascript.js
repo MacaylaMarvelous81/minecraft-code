@@ -57,6 +57,12 @@ export const javascriptBlocks = {
 
         return `agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
     },
+    agent_build(block, generator) {
+        const slot = generator.valueToCode(block, 'SLOT', Order.NONE);
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.build(${ slot }, '${ direction }');\n`;
+    },
     player_died(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 

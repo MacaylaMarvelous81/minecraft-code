@@ -21,5 +21,8 @@ export const agent = {
     },
     drop(slot, amount, direction) {
         minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
+    },
+    build(slot, direction) {
+        minecraft.runCommand(`agent place ${ slot } ${ direction }`);
     }
 };

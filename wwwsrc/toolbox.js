@@ -715,6 +715,20 @@ export const toolbox = {
                             }
                         }
                     }
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_build',
+                    inputs: {
+                        SLOT: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        }
+                    }
                 }
             ]
         },

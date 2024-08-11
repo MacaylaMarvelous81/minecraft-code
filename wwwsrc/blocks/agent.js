@@ -143,5 +143,32 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         nextStatement: null,
         previousStatement: null,
         tooltip: 'Drop items from the inventory of your Agent in a direction.'
+    },
+    {
+        type: 'agent_build',
+        message0: 'place block from slot %1 %2',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'SLOT',
+                check: 'Number'
+            },
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: [
+                    [ 'forward', 'FORWARD' ],
+                    [ 'back', 'BACK' ],
+                    [ 'left', 'LEFT' ],
+                    [ 'right', 'RIGHT' ],
+                    [ 'up', 'UP' ],
+                    [ 'down', 'DOWN' ]
+                ]
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Place a block from the inventory of your Agent in a direction.'
     }
 ]);
