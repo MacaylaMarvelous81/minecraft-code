@@ -27,7 +27,7 @@ export const javascriptBlocks = {
         return `agent.teleport(${ position });\n`;
     },
     agent_position(block, generator) {
-        return [ 'await agent.getPosition()', Order.FUNCTION_CALL ];
+        return [ 'agent.getPosition()', Order.FUNCTION_CALL ];
     },
     agent_move(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
@@ -68,6 +68,6 @@ export const javascriptBlocks = {
         return `player.teleport(${ position });\n`;
     },
     player_position(block, generator) {
-        return [ 'await player.getPosition()', Order.FUNCTION_CALL ];
+        return [ 'player.getPosition()', Order.FUNCTION_CALL ];
     }
 };

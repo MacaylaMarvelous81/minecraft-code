@@ -83,6 +83,19 @@ app.whenReady().then(() => {
             });
         });
     });
+
+    // same as above but synchronously
+    ipcMain.on('command-with-response', async (event, command) => {
+        event.returnValue = await new Promise((resolve, reject) => {
+            wss.clients.forEach((ws) => {
+                const id = crypto.randomUUID();
+
+                commandRequests[id] = (result) => resolve(result);
+
+                ws.send(JSON.stringify(buildCommandRequest(command, id)));
+            });
+        });
+    });
 });
 
 app.on('window-all-closed', () => {

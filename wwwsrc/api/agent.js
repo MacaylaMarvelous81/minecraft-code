@@ -2,8 +2,8 @@ export const agent = {
     teleport(position) {
         minecraft.runCommand(`agent tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
     },
-    async getPosition() {
-        return await minecraft.runCommandWithResponse('agent getposition');
+    getPosition() {
+        return minecraft.runCommandWithResponse('agent getposition');
     },
     move(direction, blocks) {
         for (let i = 0; i < blocks; i++) {
