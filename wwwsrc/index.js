@@ -65,5 +65,7 @@ ${ genCode }\
     interpreter.import('agent', { agent });
     interpreter.import('player', { player });
 
+    minecraft.resetEventListeners();
+
     interpreter.run(code);
 });
