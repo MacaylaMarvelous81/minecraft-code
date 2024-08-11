@@ -728,16 +728,22 @@ export const toolbox = {
                     type: 'player_died'
                 },
                 {
-                    kind: 'block',
-                    type: 'player_used_item'
-                },
-                {
-                    kind: 'block',
-                    type: 'player_used_item_count'
-                },
-                {
-                    kind: 'block',
-                    type: 'player_used_item_id'
+                    kind: 'category',
+                    name: 'Use Item Event',
+                    contents: [
+                        {
+                            kind: 'block',
+                            type: 'player_used_item'
+                        },
+                        {
+                            kind: 'block',
+                            type: 'player_used_item_count'
+                        },
+                        {
+                            kind: 'block',
+                            type: 'player_used_item_id'
+                        }
+                    ]
                 },
                 {
                     kind: 'block',
