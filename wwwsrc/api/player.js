@@ -7,5 +7,10 @@ export const player = {
         const playerDetails = JSON.parse(body.details)[0];
 
         return playerDetails.position;
+    },
+    on(eventName, callback) {
+        if (eventName === 'die') {
+            minecraft.onPlayerDied(callback);
+        }
     }
 };

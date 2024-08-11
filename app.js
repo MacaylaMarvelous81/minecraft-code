@@ -3,7 +3,7 @@ import { WebSocketServer } from 'ws';
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'node:path';
 import crypto from "node:crypto";
-import { buildCommandRequest } from './mcws.js';
+import { buildSubscription, buildCommandRequest } from './mcws.js';
 
 const commandRequests = {};
 
@@ -18,6 +18,8 @@ console.log(`Server started on port ${ port }`);
 wss.on('connection', (ws) => {
     if (wss.clients.size > 1) ws.close();
 
+    ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
+
     ws.on('message', (message) => {
         try {
             const data = JSON.parse(message);
@@ -26,6 +28,8 @@ wss.on('connection', (ws) => {
                 commandRequests[data?.header?.requestId](data?.body);
 
                 delete commandRequests[data?.header?.requestId];
+            } else if (data?.header?.messagePurpose === 'event') {
+                BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(`event:${ data?.header?.eventName }`, data?.body));
             }
         } catch (err) {
             if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
