@@ -28,6 +28,20 @@ export const playerBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         tooltips: 'Runs when you use an item.'
     },
     {
+        type: 'player_used_item_count',
+        message0: 'amount of items used',
+        colour: 210,
+        output: 'Number',
+        tooltip: 'How many items you used when the used item event last ran.'
+    },
+    {
+        type: 'player_used_item_id',
+        message0: 'id of item used',
+        colour: 210,
+        output: 'String',
+        tooltip: 'The id of the item you used when the item event last ran, in the format "namespace:id".'
+    },
+    {
         type: 'player_teleport',
         message0: 'teleport player to %1',
         args0: [

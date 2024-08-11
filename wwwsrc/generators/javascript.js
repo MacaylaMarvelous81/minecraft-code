@@ -67,6 +67,12 @@ export const javascriptBlocks = {
 
         return `player.on('useItem', () => {\n${ code }\n});\n`;
     },
+    player_used_item_count(block, generator) {
+        return [ 'player.itemAmountUsed', Order.MEMBER ];
+    },
+    player_used_item_id(block, generator) {
+        return [ 'player.itemId', Order.MEMBER ];
+    },
     player_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 

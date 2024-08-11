@@ -1,4 +1,7 @@
 export const player = {
+    itemAmountUsed: 0,
+    itemId: '',
+
     teleport(position) {
         minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
     },
@@ -15,7 +18,9 @@ export const player = {
                 break;
             case 'useItem':
                 minecraft.onItemUsed((body) => {
-                    // TODO: Store event data
+                    this.itemAmountUsed = body?.count || 0;
+                    this.itemId = `${ body?.item?.namespace }:${ body?.item?.id }`;
+
                     callback();
                 });
                 break;
