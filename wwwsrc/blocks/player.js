@@ -15,6 +15,19 @@ export const playerBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         tooltip: 'Runs when you die.'
     },
     {
+        type: 'player_used_item',
+        message0: 'when player uses an item',
+        message1: '%1',
+        args1: [
+            {
+                type: 'input_statement',
+                name: 'DO'
+            }
+        ],
+        colour: 210,
+        tooltips: 'Runs when you use an item.'
+    },
+    {
         type: 'player_teleport',
         message0: 'teleport player to %1',
         args0: [

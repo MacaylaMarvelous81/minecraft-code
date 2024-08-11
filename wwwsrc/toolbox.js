@@ -729,6 +729,10 @@ export const toolbox = {
                 },
                 {
                     kind: 'block',
+                    type: 'player_used_item'
+                },
+                {
+                    kind: 'block',
                     type: 'player_teleport',
                     value: {
                         POSITION: {

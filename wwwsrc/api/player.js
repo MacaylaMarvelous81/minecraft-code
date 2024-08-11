@@ -9,6 +9,17 @@ export const player = {
         return playerDetails.position;
     },
     on(eventName, callback) {
+        switch (eventName) {
+            case 'die':
+                minecraft.onPlayerDied(callback);
+                break;
+            case 'useItem':
+                minecraft.onItemUsed((body) => {
+                    // TODO: Store event data
+                    callback();
+                });
+                break;
+        }
         if (eventName === 'die') {
             minecraft.onPlayerDied(callback);
         }

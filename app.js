@@ -19,6 +19,7 @@ wss.on('connection', (ws) => {
     if (wss.clients.size > 1) ws.close();
 
     ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
+    ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
 
     ws.on('message', (message) => {
         try {

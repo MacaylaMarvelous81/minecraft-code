@@ -62,6 +62,11 @@ export const javascriptBlocks = {
 
         return `player.on('die', () => {\n${ code }\n});\n`;
     },
+    player_used_item(block, generator) {
+        const code = generator.statementToCode(block, 'DO');
+
+        return `player.on('useItem', () => {\n${ code }\n});\n`;
+    },
     player_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
