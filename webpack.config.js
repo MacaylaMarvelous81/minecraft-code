@@ -31,10 +31,6 @@ export default {
         })
     ],
     resolve: {
-        alias: {
-            blockly: path.resolve(import.meta.dirname, 'node_modules/blockly'),
-            'js-interpreter': path.resolve(import.meta.dirname, 'node_modules/js-interpreter')
-        },
         fallback: {
             vm: false
         }

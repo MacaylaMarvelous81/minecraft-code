@@ -8,9 +8,9 @@ import { playerBlocks } from './blocks/player.js';
 import { javascriptGenerator } from 'blockly/javascript';
 import { javascriptBlocks } from './generators/javascript.js';
 import { toolbox } from './toolbox.js';
-import Interpreter from 'js-interpreter';
-import { buildAgent } from './api/agent.js';
-import { buildPlayer } from './api/player.js';
+import Sval from 'sval';
+import { agent } from './api/agent.js';
+import { player } from './api/player.js';
 import './index.css';
 import 'vex-js/dist/css/vex.css';
 import 'vex-js/dist/css/vex-theme-default.css';
@@ -48,17 +48,22 @@ const runButton = document.getElementById('run-button');
 runButton.addEventListener('click', () => {
     if (workspace.isDragging()) return;
 
-    const code = javascriptGenerator.workspaceToCode(workspace);
-    console.log("Generated code", code);
+    const genCode = javascriptGenerator.workspaceToCode(workspace);
+    // Imports are required in 'module' type.
+    // Maybe only import modules used by the user?
+    const code = `\
+import { agent } from 'agent';
+import { player } from 'player';
 
-    const interpreter = new Interpreter(code, (initInterpreter, globalObject) => {
-        initInterpreter.setProperty(globalObject, 'agent', buildAgent(initInterpreter));
-        initInterpreter.setProperty(globalObject, 'player', buildPlayer(initInterpreter));
-    });
+${ genCode }\
+`;
+    console.log("Code to interpret:", code);
 
-    function step() {
-        if (interpreter.step()) window.setTimeout(step, 0);
-    }
+    // Top-level await works in the module type.
+    const interpreter = new Sval({ sourceType: 'module' });
 
-    step();
+    interpreter.import('agent', { agent });
+    interpreter.import('player', { player });
+
+    interpreter.run(code);
 });

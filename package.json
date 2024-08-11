@@ -18,7 +18,7 @@
 	"dependencies": {
 		"blockly": "^11.1.1",
 		"get-port": "^7.1.0",
-		"js-interpreter": "^5.1.2",
+		"sval": "^0.5.2",
 		"vex-dialog": "^1.1.0",
 		"vex-js": "^4.1.0",
 		"ws": "^8.18.0"
