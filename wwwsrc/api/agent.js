@@ -24,5 +24,8 @@ export const agent = {
     },
     build(slot, direction) {
         minecraft.runCommand(`agent place ${ slot } ${ direction }`);
+    },
+    till(direction) {
+        minecraft.runCommand(`agent till ${ direction }`);
     }
 };

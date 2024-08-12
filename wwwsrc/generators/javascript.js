@@ -63,6 +63,11 @@ export const javascriptBlocks = {
 
         return `agent.build(${ slot }, '${ direction }');\n`;
     },
+    agent_till(block, generator) {
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.till('${ direction }');\n`;
+    },
     player_died(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 

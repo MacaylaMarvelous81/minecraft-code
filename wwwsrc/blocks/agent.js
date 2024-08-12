@@ -1,5 +1,14 @@
 import * as Blockly from 'blockly';
 
+const directionOptions = [
+    [ 'forward', 'FORWARD' ],
+    [ 'back', 'BACK' ],
+    [ 'left', 'LEFT' ],
+    [ 'right', 'RIGHT' ],
+    [ 'up', 'UP' ],
+    [ 'down', 'DOWN' ]
+];
+
 export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
     {
         type: 'agent_teleport',
@@ -30,14 +39,7 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
             {
                 type: 'field_dropdown',
                 name: 'DIRECTION',
-                options: [
-                    [ 'forward', 'FORWARD' ],
-                    [ 'back', 'BACK' ],
-                    [ 'left', 'LEFT' ],
-                    [ 'right', 'RIGHT' ],
-                    [ 'up', 'UP' ],
-                    [ 'down', 'DOWN' ]
-                ]
+                options: directionOptions
             },
             {
                 type: 'input_value',
@@ -75,14 +77,7 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
             {
                 type: 'field_dropdown',
                 name: 'DIRECTION',
-                options: [
-                    [ 'forward', 'FORWARD' ],
-                    [ 'back', 'BACK' ],
-                    [ 'left', 'LEFT' ],
-                    [ 'right', 'RIGHT' ],
-                    [ 'up', 'UP' ],
-                    [ 'down', 'DOWN' ]
-                ]
+                options: directionOptions
             }
         ],
         colour: 351,
@@ -97,14 +92,7 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
             {
                 type: 'field_dropdown',
                 name: 'DIRECTION',
-                options: [
-                    [ 'forward', 'FORWARD' ],
-                    [ 'back', 'BACK' ],
-                    [ 'left', 'LEFT' ],
-                    [ 'right', 'RIGHT' ],
-                    [ 'up', 'UP' ],
-                    [ 'down', 'DOWN' ]
-                ]
+                options: directionOptions
             }
         ],
         colour: 351,
@@ -129,14 +117,7 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
             {
                 type: 'field_dropdown',
                 name: 'DIRECTION',
-                options: [
-                    [ 'forward', 'FORWARD' ],
-                    [ 'back', 'BACK' ],
-                    [ 'left', 'LEFT' ],
-                    [ 'right', 'RIGHT' ],
-                    [ 'up', 'UP' ],
-                    [ 'down', 'DOWN' ]
-                ]
+                options: directionOptions
             }
         ],
         colour: 351,
@@ -156,19 +137,27 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
             {
                 type: 'field_dropdown',
                 name: 'DIRECTION',
-                options: [
-                    [ 'forward', 'FORWARD' ],
-                    [ 'back', 'BACK' ],
-                    [ 'left', 'LEFT' ],
-                    [ 'right', 'RIGHT' ],
-                    [ 'up', 'UP' ],
-                    [ 'down', 'DOWN' ]
-                ]
+                options: directionOptions
             }
         ],
         colour: 351,
         nextStatement: null,
         previousStatement: null,
         tooltip: 'Place a block from the inventory of your Agent in a direction.'
+    },
+    {
+        type: 'agent_till',
+        message0: 'make agent till grass %1',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: directionOptions
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Make your Agent till grass in a direction.'
     }
 ]);

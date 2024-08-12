@@ -729,6 +729,10 @@ export const toolbox = {
                             }
                         }
                     }
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_till'
                 }
             ]
         },
