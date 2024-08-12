@@ -68,6 +68,14 @@ export const javascriptBlocks = {
 
         return `player.on('die', () => {\n${ code }\n});\n`;
     },
+    player_teleport(block, generator) {
+        const position = generator.valueToCode(block, 'POSITION', Order.NONE);
+
+        return `player.teleport(${ position });\n`;
+    },
+    player_position(block, generator) {
+        return [ 'player.getPosition()', Order.FUNCTION_CALL ];
+    },
     player_used_item(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
@@ -79,12 +87,12 @@ export const javascriptBlocks = {
     player_used_item_id(block, generator) {
         return [ 'player.itemId', Order.MEMBER ];
     },
-    player_teleport(block, generator) {
-        const position = generator.valueToCode(block, 'POSITION', Order.NONE);
+    player_chat(block, generator) {
+        const code = generator.statementToCode(block, 'DO');
 
-        return `player.teleport(${ position });\n`;
+        return `player.on('chat', () => {\n${ code }\n});\n`;
     },
-    player_position(block, generator) {
-        return [ 'player.getPosition()', Order.FUNCTION_CALL ];
+    player_chat_message(block, generator) {
+        return [ 'player.message', Order.MEMBER ];
     }
 };

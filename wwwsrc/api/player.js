@@ -1,6 +1,7 @@
 export const player = {
     itemAmountUsed: 0,
     itemId: '',
+    message: '',
 
     teleport(position) {
         minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
@@ -20,6 +21,13 @@ export const player = {
                 minecraft.onItemUsed((body) => {
                     this.itemAmountUsed = body?.count || 0;
                     this.itemId = `${ body?.item?.namespace }:${ body?.item?.id }`;
+
+                    callback();
+                });
+                break;
+            case 'chat':
+                minecraft.onPlayerMessage((body) => {
+                    this.message = body.message;
 
                     callback();
                 });

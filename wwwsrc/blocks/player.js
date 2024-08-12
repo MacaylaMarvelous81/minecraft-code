@@ -15,6 +15,28 @@ export const playerBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         tooltip: 'Runs when you die.'
     },
     {
+        type: 'player_teleport',
+        message0: 'teleport player to %1',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'POSITION',
+                check: 'Coordinate'
+            },
+        ],
+        colour: 210,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Teleport yourself to a location in the world.'
+    },
+    {
+        type: 'player_position',
+        message0: 'position of player',
+        colour: 210,
+        output: 'Coordinate',
+        tooltip: 'Your position in the world.'
+    },
+    {
         type: 'player_used_item',
         message0: 'when player uses an item',
         message1: '%1',
@@ -42,25 +64,23 @@ export const playerBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         tooltip: 'The id of the item you used when the item event last ran, in the format "namespace:id".'
     },
     {
-        type: 'player_teleport',
-        message0: 'teleport player to %1',
-        args0: [
+        type: 'player_chat',
+        message0: 'when player chats',
+        message1: '%1',
+        args1: [
             {
-                type: 'input_value',
-                name: 'POSITION',
-                check: 'Coordinate'
-            },
+                type: 'input_statement',
+                name: 'DO'
+            }
         ],
         colour: 210,
-        nextStatement: null,
-        previousStatement: null,
-        tooltip: 'Teleport yourself to a location in the world.'
+        tooltip: 'Runs when you send a chat message.'
     },
     {
-        type: 'player_position',
-        message0: 'position of player',
+        type: 'player_chat_message',
+        message0: 'chat message',
         colour: 210,
-        output: 'Coordinate',
-        tooltip: 'Your position in the world.'
+        output: 'String',
+        tooltip: 'The chat message from the last time the chat event ran.'
     }
 ]);

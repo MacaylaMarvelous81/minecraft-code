@@ -26,6 +26,7 @@ wss.on('connection', (ws) => {
 
     ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
     ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
+    ws.send(JSON.stringify(buildSubscription('PlayerMessage', crypto.randomUUID())));
 
     ws.on('message', (message) => {
         try {

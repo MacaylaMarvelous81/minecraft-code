@@ -16,5 +16,6 @@ contextBridge.exposeInMainWorld('minecraft', {
         });
     },
     onPlayerDied: (callback) => ipcRenderer.on('event:PlayerDied', (event, value) => callback(value)),
-    onItemUsed: (callback) => ipcRenderer.on('event:ItemUsed', (event, value) => callback(value))
+    onItemUsed: (callback) => ipcRenderer.on('event:ItemUsed', (event, value) => callback(value)),
+    onPlayerMessage: (callback) => ipcRenderer.on('event:PlayerMessage', (event, value) => callback(value))
 });

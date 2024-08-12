@@ -742,6 +742,21 @@ export const toolbox = {
                     type: 'player_died'
                 },
                 {
+                    kind: 'block',
+                    type: 'player_teleport',
+                    value: {
+                        POSITION: {
+                            shadow: {
+                                type: 'math_coordinate'
+                            }
+                        }
+                    }
+                },
+                {
+                    kind: 'block',
+                    type: 'player_position'
+                },
+                {
                     kind: 'category',
                     name: 'Use Item Event',
                     contents: [
@@ -760,19 +775,18 @@ export const toolbox = {
                     ]
                 },
                 {
-                    kind: 'block',
-                    type: 'player_teleport',
-                    value: {
-                        POSITION: {
-                            shadow: {
-                                type: 'math_coordinate'
-                            }
+                    kind: 'category',
+                    name: 'Chat Event',
+                    contents: [
+                        {
+                            kind: 'block',
+                            type: 'player_chat'
+                        },
+                        {
+                            kind: 'block',
+                            type: 'player_chat_message'
                         }
-                    }
-                },
-                {
-                    kind: 'block',
-                    type: 'player_position'
+                    ]
                 }
             ]
         },
