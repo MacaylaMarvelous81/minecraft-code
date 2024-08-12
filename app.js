@@ -15,18 +15,6 @@ const wss = new WebSocketServer({
 });
 console.log(`Server started on port ${ port }`);
 
-function createWindow() {
-    const window = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.resolve(import.meta.dirname, 'preload.js')
-        }
-    });
-
-    window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
-}
-
 function sendAllRenderers(channel, data) {
     BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(channel, data));
 }
@@ -71,11 +59,15 @@ const key = await new Promise((resolve, reject) => {
 });
 
 app.whenReady().then(() => {
-    createWindow();
-
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    const window = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.resolve(import.meta.dirname, 'preload.js')
+        }
     });
+
+    window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
 
     ipcMain.on('command', (event, command) => {
         wss.clients.forEach((ws) => {
@@ -109,8 +101,4 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle('request-port', (event) => port);
-});
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
 });
