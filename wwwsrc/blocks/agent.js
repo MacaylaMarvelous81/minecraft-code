@@ -197,5 +197,30 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         nextStatement: null,
         previousStatement: null,
         tooltip: 'Make your Agent collect all items with the specified id in its immediate vicinity.'
+    },
+    {
+        type: 'agent_transfer',
+        message0: 'within agent inventory transfer %1 items from slot %2 to slot %3',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'AMOUNT',
+                check: 'Number'
+            },
+            {
+                type: 'input_value',
+                name: 'FROM',
+                check: 'Number'
+            },
+            {
+                type: 'input_value',
+                name: 'TO',
+                check: 'Number'
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Transfer items from one slot to another within the Agent\'s inventory.'
     }
 ]);

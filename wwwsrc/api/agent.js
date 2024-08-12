@@ -34,5 +34,8 @@ export const agent = {
     },
     collect(id) {
         minecraft.runCommand(`agent collect ${ id }`);
+    },
+    transfer(srcSlotNum, quantity, dstSlotNum) {
+        minecraft.runCommand(`agent transfer ${ srcSlotNum } ${ quantity } ${ dstSlotNum }`);
     }
 };

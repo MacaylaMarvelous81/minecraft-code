@@ -755,6 +755,36 @@ export const toolbox = {
                             }
                         }
                     }
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_transfer',
+                    inputs: {
+                        AMOUNT: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        },
+                        FROM: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 1
+                                }
+                            }
+                        },
+                        TO: {
+                            shadow: {
+                                type: 'math_number',
+                                fields: {
+                                    NUM: 2
+                                }
+                            }
+                        }
+                    }
                 }
             ]
         },

@@ -81,6 +81,13 @@ export const javascriptBlocks = {
 
         return `agent.collect(${ item });\n`;
     },
+    agent_transfer(block, generator) {
+        const amount = generator.valueToCode(block, 'AMOUNT', Order.NONE);
+        const fromSlot = generator.valueToCode(block, 'FROM', Order.NONE);
+        const toSlot = generator.valueToCode(block, 'TO', Order.NONE);
+
+        return `agent.transfer(${ fromSlot }, ${ amount }, ${ toSlot });\n`;
+    },
     player_died(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
