@@ -718,6 +718,10 @@ export const toolbox = {
                 },
                 {
                     kind: 'block',
+                    type: 'agent_drop_all'
+                },
+                {
+                    kind: 'block',
                     type: 'agent_build',
                     inputs: {
                         SLOT: {

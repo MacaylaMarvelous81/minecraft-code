@@ -20,7 +20,11 @@ export const agent = {
         minecraft.runCommand(`agent destroy ${ direction }`);
     },
     drop(slot, amount, direction) {
-        minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
+        if (slot === null) {
+            minecraft.runCommand(`agent dropall ${ direction }`);
+        } else {
+            minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
+        }
     },
     build(slot, direction) {
         minecraft.runCommand(`agent place ${ slot } ${ direction }`);

@@ -126,6 +126,21 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         tooltip: 'Drop items from the inventory of your Agent in a direction.'
     },
     {
+        type: 'agent_drop_all',
+        message0: 'drop everything from agent inventory %1',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'DIRECTION',
+                options: directionOptions
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Drop your Agent\'s entire inventory in a direction.'
+    },
+    {
         type: 'agent_build',
         message0: 'place block from slot %1 %2',
         args0: [

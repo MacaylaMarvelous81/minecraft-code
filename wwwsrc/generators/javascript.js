@@ -57,6 +57,11 @@ export const javascriptBlocks = {
 
         return `agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
     },
+    agent_drop_all(block, generator) {
+        const direction = block.getFieldValue('DIRECTION');
+
+        return `agent.drop(null, null, '${ direction }');\n`;
+    },
     agent_build(block, generator) {
         const slot = generator.valueToCode(block, 'SLOT', Order.NONE);
         const direction = block.getFieldValue('DIRECTION');
