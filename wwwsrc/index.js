@@ -42,7 +42,21 @@ Object.assign(javascriptGenerator.forBlock, javascriptBlocks);
 const blocklyContainer = document.getElementById('blockly');
 const workspace = Blockly.inject(blocklyContainer, { toolbox });
 
+if (localStorage.getItem('workspace-default')) {
+    try {
+        Blockly.serialization.workspaces.load(JSON.parse(localStorage.getItem('workspace-default')), workspace);
+    } catch(err) {
+        localStorage.removeItem('workspace-default');
+        vex.dialog.alert(`Failed to load the saved workspace. The saved data will be deleted. ${ err }`);
+    }
+}
+
 workspace.addChangeListener(Blockly.Events.disableOrphans);
+workspace.addChangeListener((event) => {
+    if (event.isUiEvent) return;
+
+    localStorage.setItem('workspace-default', JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
+});
 
 const runButton = document.getElementById('run-button');
 async function connectButtonListener() {
