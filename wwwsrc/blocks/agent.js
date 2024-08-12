@@ -159,5 +159,28 @@ export const agentBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
         nextStatement: null,
         previousStatement: null,
         tooltip: 'Make your Agent till grass in a direction.'
+    },
+    {
+        type: 'agent_collect',
+        message0: 'make agent collect items',
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Make your Agent collect all items in its immediate vicinity.'
+    },
+    {
+        type: 'agent_collect_specify',
+        message0: 'make agent collect %1',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'ITEM',
+                check: 'String'
+            }
+        ],
+        colour: 351,
+        nextStatement: null,
+        previousStatement: null,
+        tooltip: 'Make your Agent collect all items with the specified id in its immediate vicinity.'
     }
 ]);

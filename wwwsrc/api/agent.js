@@ -27,5 +27,8 @@ export const agent = {
     },
     till(direction) {
         minecraft.runCommand(`agent till ${ direction }`);
+    },
+    collect(id) {
+        minecraft.runCommand(`agent collect ${ id }`);
     }
 };

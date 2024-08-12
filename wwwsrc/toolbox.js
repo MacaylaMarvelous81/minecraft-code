@@ -733,6 +733,24 @@ export const toolbox = {
                 {
                     kind: 'block',
                     type: 'agent_till'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_collect'
+                },
+                {
+                    kind: 'block',
+                    type: 'agent_collect_specify',
+                    inputs: {
+                        ITEM: {
+                            shadow: {
+                                type: 'text',
+                                fields: {
+                                    TEXT: 'minecraft:dirt'
+                                }
+                            }
+                        }
+                    }
                 }
             ]
         },

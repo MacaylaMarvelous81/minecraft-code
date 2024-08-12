@@ -68,6 +68,14 @@ export const javascriptBlocks = {
 
         return `agent.till('${ direction }');\n`;
     },
+    agent_collect(block, generator) {
+        return 'agent.collect(\'all\');\n';
+    },
+    agent_collect_specify(block, generator) {
+        const item = generator.valueToCode(block, 'ITEM', Order.NONE);
+
+        return `agent.collect(${ item });\n`;
+    },
     player_died(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
