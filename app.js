@@ -15,8 +15,26 @@ const wss = new WebSocketServer({
 });
 console.log(`Server started on port ${ port }`);
 
+function createWindow() {
+    const window = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.resolve(import.meta.dirname, 'preload.js')
+        }
+    });
+
+    window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
+}
+
+function sendAllRenderers(channel, data) {
+    BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(channel, data));
+}
+
 wss.on('connection', (ws) => {
     if (wss.clients.size > 1) ws.close();
+
+    sendAllRenderers('connection');
 
     ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
     ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
@@ -30,7 +48,7 @@ wss.on('connection', (ws) => {
 
                 delete commandRequests[data?.header?.requestId];
             } else if (data?.header?.messagePurpose === 'event') {
-                BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(`event:${ data?.header?.eventName }`, data?.body));
+                sendAllRenderers(`event:${ data?.header?.eventName }`, data?.body);
             }
         } catch (err) {
             if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
@@ -51,18 +69,6 @@ const key = await new Promise((resolve, reject) => {
         }
     })
 });
-
-function createWindow() {
-    const window = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.resolve(import.meta.dirname, 'preload.js')
-        }
-    });
-
-    window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
-}
 
 app.whenReady().then(() => {
     createWindow();
@@ -101,6 +107,8 @@ app.whenReady().then(() => {
             });
         });
     });
+
+    ipcMain.handle('request-port', (event) => port);
 });
 
 app.on('window-all-closed', () => {

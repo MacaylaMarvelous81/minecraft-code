@@ -45,27 +45,40 @@ const workspace = Blockly.inject(blocklyContainer, { toolbox });
 workspace.addChangeListener(Blockly.Events.disableOrphans);
 
 const runButton = document.getElementById('run-button');
-runButton.addEventListener('click', () => {
-    if (workspace.isDragging()) return;
+async function connectButtonListener() {
+    vex.dialog.alert({ unsafeMessage: `To connect, run the \'connect\' command in Minecraft, in the format \'/connect\
+    ip address:port\'. The IP address should be that of the machine this program is running on and should be accessible\
+    by the machine running Minecraft. For instance, \'localhost\' if it is running on this machine, or its local IP\
+    address if it is on the same network. You will need to connect to the server to run your code.<br><br>The server is\
+    on the port <strong>${ await wsserver.getPort() }.</strong>` });
+}
+runButton.addEventListener('click', connectButtonListener);
+wsserver.onConnection(() => {
+    runButton.textContent = 'Run!';
 
-    const genCode = javascriptGenerator.workspaceToCode(workspace);
-    // Imports are required in 'module' type.
-    // Maybe only import modules used by the user?
-    const code = `\
+    runButton.removeEventListener('click', connectButtonListener);
+    runButton.addEventListener('click', () => {
+        if (workspace.isDragging()) return;
+
+        const genCode = javascriptGenerator.workspaceToCode(workspace);
+        // Imports are required in 'module' type.
+        // Maybe only import modules used by the user?
+        const code = `\
 import { agent } from 'agent';
 import { player } from 'player';
 
 ${ genCode }\
 `;
-    console.log("Code to interpret:", code);
+        console.log("Code to interpret:", code);
 
-    // Top-level await works in the module type.
-    const interpreter = new Sval({ sourceType: 'module' });
+        // Top-level await works in the module type.
+        const interpreter = new Sval({ sourceType: 'module' });
 
-    interpreter.import('agent', { agent });
-    interpreter.import('player', { player });
+        interpreter.import('agent', { agent });
+        interpreter.import('player', { player });
 
-    minecraft.resetEventListeners();
+        minecraft.resetEventListeners();
 
-    interpreter.run(code);
+        interpreter.run(code);
+    });
 });

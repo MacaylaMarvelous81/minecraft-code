@@ -1,5 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+contextBridge.exposeInMainWorld('wsserver', {
+    getPort: () => ipcRenderer.invoke('request-port'),
+    onConnection: (callback) => ipcRenderer.on('connection', (event) => callback())
+});
+
 contextBridge.exposeInMainWorld('minecraft', {
     runCommand: (command) => ipcRenderer.send('command', command),
     runCommandWithResponse: (command) => ipcRenderer.sendSync('command-with-response', command),
