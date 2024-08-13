@@ -16,7 +16,8 @@
 		"appId": "com.jomarm.block-coding-for-minecraft",
 		"productName": "Block Coding for Minecraft",
 		"mac": {
-			"category": "public.app-category.education"
+			"category": "public.app-category.education",
+			"identity": null
 		},
 		"linux": {
 			"target": [
