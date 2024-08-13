@@ -1,4 +1,4 @@
-# Code Blocks for Minecraft
+# Block Coding for Minecraft
 Blockly for Minecraft: Bedrock Edition. Connects via WebSocket, like the old
 Minecraft Code Connection.
 **NOT AN OFFICIAL MINECRAFT PROGRAM. NOT APPROVED BY OR ASSOCIATED WITH
