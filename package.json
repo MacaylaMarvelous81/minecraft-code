@@ -1,7 +1,40 @@
 {
+	"name": "block-coding-for-minecraft",
+	"description": "Block-based visual coding via Blockly for Minecraft: Bedrock Edition",
+	"version": "0.0.1",
+	"license": "MIT",
+	"author": {
+		"name": "Jomar Milan",
+		"email": "jomarm@jomarm.com",
+		"url": "https://jomarm.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MacaylaMarvelous81/minecraft-code"
+	},
+	"build": {
+		"appId": "com.jomarm.block-coding-for-minecraft",
+		"productName": "Block Coding for Minecraft",
+		"mac": {
+			"category": "public.app-category.education"
+		},
+		"linux": {
+			"target": [
+				{
+					"target": "AppImage"
+				},
+				{
+					"target": "tar.gz"
+				}
+			],
+			"category": "Education"
+		}
+	},
 	"type": "module",
 	"scripts": {
-		"start": "webpack --mode development && electron ."
+		"start": "webpack --mode development && electron .",
+		"pack": "webpack --mode production && electron-builder --dir",
+		"dist": "webpack --mode production && electron-builder"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
@@ -9,6 +42,7 @@
 		"babel-loader": "^9.1.3",
 		"css-loader": "^7.1.2",
 		"electron": "^31.3.1",
+		"electron-builder": "^24.13.3",
 		"html-webpack-plugin": "^5.6.0",
 		"style-loader": "^4.0.0",
 		"webpack": "^5.93.0",
