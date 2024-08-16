@@ -1,9 +1,10 @@
 import getPort, { portNumbers } from 'get-port';
 import { WebSocketServer } from 'ws';
 import { BrowserWindow, app, ipcMain } from 'electron';
-import path from 'node:path';
-import crypto from "node:crypto";
-import { buildSubscription, buildCommandRequest } from './mcws.js';
+import path from 'node:path'
+import crypto from 'node:crypto';
+import { Client } from './websocket/client.js';
+import { buildCommandRequest } from './websocket/requests.js';
 
 const commandRequests = {};
 
@@ -40,40 +41,14 @@ function sendAllRenderers(channel, data) {
 }
 
 wss.on('connection', async (ws) => {
-    if (wss.clients.size > 1) ws.close();
-
     sendAllRenderers('connection');
 
-    function initPlayer() {
-        ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
-        ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
-        ws.send(JSON.stringify(buildSubscription('PlayerMessage', crypto.randomUUID())));
-    }
+    const client = new Client(ws);
 
-    const encryptId = crypto.randomUUID();
-
-    ws.on('message', (message) => {
-        console.log(message.toString());
-        try {
-            const data = JSON.parse(message);
-
-            if (data?.header?.messagePurpose === 'commandResponse' && data?.header?.requestId in commandRequests) {
-                commandRequests[data?.header?.requestId](data?.body);
-
-                delete commandRequests[data?.header?.requestId];
-            } else if (data?.header?.messagePurpose === 'event') {
-                sendAllRenderers(`event:${ data?.header?.eventName }`, data?.body);
-            } else if (data?.header?.messagePurpose === 'ws:encrypt') {
-                Buffer.from(data?.body?.publicKey, 'base64')
-            }
-        } catch (err) {
-            if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
-
-            console.error('Unknown error occurred handling a message.', err);
-        }
-    });
-
-    ws.send(JSON.stringify(buildCommandRequest(`enableencryption "${ Buffer.from(key.publicKey).toString('base64') }" "${ salt.toString('base64') }"`, encryptId)));
+    // await client.enableEncryption(key.publicKey, salt);
+    client.subscribeEvent('PlayerDied');
+    client.subscribeEvent('ItemUsed');
+    client.subscribeEvent('PlayerMessage');
 });
 
 app.whenReady().then(() => {
