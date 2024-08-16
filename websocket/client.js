@@ -1,7 +1,9 @@
 import crypto from 'node:crypto';
-import {buildCommandRequest, buildSubscription} from './requests.js';
+import { buildCommandRequest, buildSubscription } from './requests.js';
 
 export class Client {
+    static clients = [];
+
     #ws;
     #commandRequests = {};
     #gameEventHandlers = [];
@@ -11,6 +13,8 @@ export class Client {
         this.#ws = ws;
 
         ws.on('message', this.#handleMessage.bind(this));
+
+        this.constructor.clients.push(this);
     }
 
     onGameEvent(callback) {
@@ -31,6 +35,16 @@ export class Client {
             const encodedSalt = salt.toString('base64');
 
             this.#ws.send(JSON.stringify(buildCommandRequest(`enableencryption "${ encodedKey }" "${ encodedSalt }"`, id)));
+        });
+    }
+
+    execute(command) {
+        return new Promise((resolve, reject) => {
+            const id = crypto.randomUUID();
+
+            this.#commandRequests[id] = (result) => resolve(result);
+
+            this.#ws.send(JSON.stringify(buildCommandRequest(command, id)));
         });
     }
 
