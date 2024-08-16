@@ -5,12 +5,15 @@ export class Client {
     static clients = [];
 
     #ws;
+    #serverPrivateKey;
     #commandRequests = {};
     #gameEventHandlers = [];
     #playerKey;
+    #sharedSecret;
 
-    constructor(ws) {
+    constructor(ws, privateKey) {
         this.#ws = ws;
+        this.#serverPrivateKey = privateKey;
 
         ws.on('message', this.#handleMessage.bind(this));
 
@@ -25,17 +28,19 @@ export class Client {
         this.#ws.send(JSON.stringify(buildSubscription(eventName, crypto.randomUUID())));
     }
 
-    enableEncryption(pubkey, salt) {
-        return new Promise((resolve, reject) => {
-            const id = crypto.randomUUID();
+    async enableEncryption(pubkey, salt) {
+        const body = await this.execute(`enableencryption "${ encodedKey }" "${ encodedSalt }"`);
 
-            this.#commandRequests[id] = (result) => resolve(result);
-
-            const encodedKey = Buffer.from(pubkey).toString('base64');
-            const encodedSalt = salt.toString('base64');
-
-            this.#ws.send(JSON.stringify(buildCommandRequest(`enableencryption "${ encodedKey }" "${ encodedSalt }"`, id)));
+        this.#playerKey = crypto.createPublicKey({
+            key: Buffer.from(body.publicKey, 'base64'),
+            format: 'der',
+            type: 'spki'
         });
+
+        const ecdh = crypto.createECDH('P-384');
+        ecdh.setPrivateKey(this.#serverPrivateKey);
+
+        this.#sharedSecret = ecdh.computeSecret(this.#playerKey);
     }
 
     execute(command) {
@@ -58,12 +63,6 @@ export class Client {
                 delete this.#commandRequests[data?.header?.requestId];
             } else if (data?.header?.messagePurpose === 'event') {
                 this.#gameEventHandlers.forEach((handler) => handler(data?.header?.eventName), data?.body);
-            } else if (data?.header?.messagePurpose === 'ws:encrypt') {
-                this.#playerKey = crypto.createPublicKey({
-                    key: Buffer.from(data?.body?.publicKey, 'base64'),
-                    format: 'der',
-                    type: 'spki'
-                });
             }
         } catch (err) {
             if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);

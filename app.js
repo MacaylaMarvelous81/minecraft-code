@@ -44,7 +44,7 @@ wss.on('connection', async (ws) => {
 
     const client = new Client(ws);
 
-    // await client.enableEncryption(key.publicKey, salt);
+    await client.enableEncryption(key.publicKey, salt);
     client.subscribeEvent('PlayerDied');
     client.subscribeEvent('ItemUsed');
     client.subscribeEvent('PlayerMessage');
