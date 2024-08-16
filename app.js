@@ -11,24 +11,49 @@ const port = await getPort({
     port: portNumbers(49152, 65535)
 });
 const wss = new WebSocketServer({
-    port
+    port,
+    handleProtocols: (protocols, req) => {
+        return protocols.has('com.microsoft.minecraft.wsencrypt') ? 'com.microsoft.minecraft.wsencrypt' : false;
+    }
 });
+const key = await new Promise((resolve, reject) => {
+    crypto.generateKeyPair('ec', {
+        namedCurve: 'P-384',
+        publicKeyEncoding: {
+            type: 'spki',
+            format: 'der'
+        },
+    }, (err, publicKey, privateKey) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve({ publicKey, privateKey });
+        }
+    })
+});
+const salt = crypto.randomBytes(16);
+
 console.log(`Server started on port ${ port }`);
 
 function sendAllRenderers(channel, data) {
     BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(channel, data));
 }
 
-wss.on('connection', (ws) => {
+wss.on('connection', async (ws) => {
     if (wss.clients.size > 1) ws.close();
 
     sendAllRenderers('connection');
 
-    ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
-    ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
-    ws.send(JSON.stringify(buildSubscription('PlayerMessage', crypto.randomUUID())));
+    function initPlayer() {
+        ws.send(JSON.stringify(buildSubscription('PlayerDied', crypto.randomUUID())));
+        ws.send(JSON.stringify(buildSubscription('ItemUsed', crypto.randomUUID())));
+        ws.send(JSON.stringify(buildSubscription('PlayerMessage', crypto.randomUUID())));
+    }
+
+    const encryptId = crypto.randomUUID();
 
     ws.on('message', (message) => {
+        console.log(message.toString());
         try {
             const data = JSON.parse(message);
 
@@ -38,6 +63,8 @@ wss.on('connection', (ws) => {
                 delete commandRequests[data?.header?.requestId];
             } else if (data?.header?.messagePurpose === 'event') {
                 sendAllRenderers(`event:${ data?.header?.eventName }`, data?.body);
+            } else if (data?.header?.messagePurpose === 'ws:encrypt') {
+                Buffer.from(data?.body?.publicKey, 'base64')
             }
         } catch (err) {
             if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
@@ -45,18 +72,8 @@ wss.on('connection', (ws) => {
             console.error('Unknown error occurred handling a message.', err);
         }
     });
-});
 
-const key = await new Promise((resolve, reject) => {
-    crypto.generateKeyPair('ec', {
-        namedCurve: 'P-384'
-    }, (err, publicKey, privateKey) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve({ publicKey, privateKey });
-        }
-    })
+    ws.send(JSON.stringify(buildCommandRequest(`enableencryption "${ Buffer.from(key.publicKey).toString('base64') }" "${ salt.toString('base64') }"`, encryptId)));
 });
 
 app.whenReady().then(() => {
