@@ -9,9 +9,8 @@ export class Client {
     #ecdh;
     #commandRequests = {};
     #gameEventHandlers = [];
-    #playerKey;
-    #sharedSecret;
-    #secretKey;
+    #cipher;
+    #decipher;
 
     constructor(ws, ecdh) {
         this.#ws = ws;
@@ -43,10 +42,15 @@ export class Client {
             type: 'spki',
             format: 'pem'
         });
-        this.#playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
+        const playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
 
-        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey);
-        this.#secretKey = crypto.hash('sha256', Buffer.concat([ salt, this.#sharedSecret ]));
+        const sharedSecret = this.#ecdh.computeSecret(playerKey);
+        const secretKey = crypto.hash('sha256', Buffer.concat([ salt, sharedSecret ]), 'buffer');
+
+        this.#cipher = crypto.createCipheriv('aes-256-cfb', secretKey, secretKey.subarray(0, 16));
+        this.#decipher = crypto.createDecipheriv('aes-256-cfb', secretKey, secretKey.subarray(0, 16));
+        this.#cipher.setAutoPadding(false);
+        this.#decipher.setAutoPadding(false);
     }
 
     execute(command) {
@@ -59,19 +63,11 @@ export class Client {
         });
     }
 
-    #send(data) {
-        if (this.#secretKey) {
-            const cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey.slice(0, 32), this.#secretKey.slice(0, 16));
-            let message = cipher.update(data, 'utf8', 'hex');
-            message += cipher.final('hex');
-
-            this.#ws.send(message, { binary: true });
-
-            console.log('a', message);
+    #send(message) {
+        if (this.#cipher) {
+            this.#ws.send(this.#cipher.update(message, 'utf8'));
         } else {
-            this.#ws.send(data);
-
-            console.log('b', data);
+            this.#ws.send(message);
         }
     }
 
@@ -79,11 +75,8 @@ export class Client {
         try {
             let decryptedMessage = message;
 
-            if (this.#secretKey) {
-                const decipher = crypto.createDecipheriv('aes-256-cbc', this.#secretKey.slice(0, 32), this.#secretKey.slice(0, 16));
-                decryptedMessage = decipher.update(message, 'hex', 'utf8');
-                decryptedMessage += decipher.final('utf8');
-                console.log("decrypted message", decryptedMessage);
+            if (this.#decipher) {
+                decryptedMessage = this.#decipher.update(message).toString('utf8');
             }
 
             const data = JSON.parse(decryptedMessage);
