@@ -59,6 +59,7 @@
 	},
 	"main": "app.js",
 	"dependencies": {
+		"aes-js": "^3.1.2",
 		"blockly": "^11.1.1",
 		"get-port": "^7.1.0",
 		"sval": "^0.5.2",

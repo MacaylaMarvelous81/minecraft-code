@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { buildCommandRequest, buildSubscription } from './requests.js';
+import aesjs from 'aes-js';
 
 const asn1Header = Buffer.from("3076301006072a8648ce3d020106052b81040022036200", "hex");
 
@@ -63,18 +64,21 @@ export class Client {
 
     #send(message) {
         if (this.#encryptIV) {
-            let encryptedMessage = Buffer.from(message, 'utf8');
+            let messageBytes = aesjs.utils.utf8.toBytes(message);
+            if (messageBytes.length % 8 !== 0) {
+                const padding = 8 - (messageBytes.length % 8);
 
-            const cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey, crypto.randomBytes(16));
-            let encryptedIV = cipher.update(this.#encryptIV);
-            encryptedIV += cipher.final();
-            this.#encryptIV = encryptedIV;
+                const paddedMessage = new Uint8Array(messageBytes.length + padding);
+                paddedMessage.set(messageBytes);
+                paddedMessage.fill(0, messageBytes.length, messageBytes.length + padding);
 
-            for (let i = 0; i < encryptedMessage.length; i++) {
-                encryptedMessage[i] ^= encryptedIV[i % encryptedIV.length];
+                messageBytes = paddedMessage;
             }
 
-            console.log('Encrypted message:', encryptedMessage);
+            const cipher = new aesjs.ModeOfOperation.cfb(this.#secretKey, this.#encryptIV, 8);
+            const encryptedMessage = cipher.encrypt(messageBytes);
+
+            console.log(aesjs.utils.hex.fromBytes(encryptedMessage));
 
             this.#ws.send(encryptedMessage);
         } else {
