@@ -11,6 +11,9 @@ importers:
       blockly:
         specifier: ^11.1.1
         version: 11.1.1
+      eckey-utils:
+        specifier: ^0.7.14
+        version: 0.7.14
       get-port:
         specifier: ^7.1.0
         version: 7.1.0
@@ -1285,6 +1288,9 @@ packages:
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
+
+  eckey-utils@0.7.14:
+    resolution: {integrity: sha512-s/mENS+mMnJjDSydy0muBQQHMTWJ1nPe8EiphANZrf+lv/1u35aP9WvWHTWqCBJ21blNIurGF7UoLjtaOpoCFw==}
 
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
@@ -4123,6 +4129,8 @@ snapshots:
   dotenv@9.0.2: {}
 
   eastasianwidth@0.2.0: {}
+
+  eckey-utils@0.7.14: {}
 
   ejs@3.1.10:
     dependencies:

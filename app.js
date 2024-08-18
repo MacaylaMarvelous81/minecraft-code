@@ -14,21 +14,9 @@ const wss = new WebSocketServer({
         return protocols.has('com.microsoft.minecraft.wsencrypt') ? 'com.microsoft.minecraft.wsencrypt' : false;
     }
 });
-const key = await new Promise((resolve, reject) => {
-    crypto.generateKeyPair('ec', {
-        namedCurve: 'P-384',
-        publicKeyEncoding: {
-            type: 'spki',
-            format: 'der'
-        },
-    }, (err, publicKey, privateKey) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve({ publicKey, privateKey });
-        }
-    })
-});
+const ecdh = crypto.createECDH('secp384r1');
+ecdh.generateKeys();
+
 const salt = crypto.randomBytes(16);
 
 console.log(`Server started on port ${ port }`);
@@ -42,9 +30,9 @@ wss.on('connection', async (ws) => {
 
     sendAllRenderers('connection');
 
-    const client = new Client(ws);
+    const client = new Client(ws, ecdh);
 
-    await client.enableEncryption(key.publicKey, salt);
+    await client.enableEncryption(salt);
     client.subscribeEvent('PlayerDied');
     client.subscribeEvent('ItemUsed');
     client.subscribeEvent('PlayerMessage');

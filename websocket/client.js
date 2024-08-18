@@ -1,19 +1,22 @@
 import crypto from 'node:crypto';
 import { buildCommandRequest, buildSubscription } from './requests.js';
+import ecKeyUtils from 'eckey-utils';
 
 export class Client {
     static clients = [];
 
     #ws;
-    #serverPrivateKey;
+    #ecdh;
     #commandRequests = {};
     #gameEventHandlers = [];
     #playerKey;
     #sharedSecret;
+    #secretKey;
+    #cipher;
 
-    constructor(ws, privateKey) {
+    constructor(ws, ecdh) {
         this.#ws = ws;
-        this.#serverPrivateKey = privateKey;
+        this.#ecdh = ecdh;
 
         ws.on('message', this.#handleMessage.bind(this));
 
@@ -28,19 +31,24 @@ export class Client {
         this.#ws.send(JSON.stringify(buildSubscription(eventName, crypto.randomUUID())));
     }
 
-    async enableEncryption(pubkey, salt) {
+    async enableEncryption(salt) {
+        const encodedKey = this.#ecdh.getPublicKey('base64');
+        const encodedSalt = salt.toString('base64');
         const body = await this.execute(`enableencryption "${ encodedKey }" "${ encodedSalt }"`);
 
-        this.#playerKey = crypto.createPublicKey({
+        const pemKey = crypto.createPublicKey({
             key: Buffer.from(body.publicKey, 'base64'),
-            format: 'der',
-            type: 'spki'
+            type: 'spki',
+            format: 'der'
+        }).export({
+            type: 'spki',
+            format: 'pem'
         });
+        this.#playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
 
-        const ecdh = crypto.createECDH('P-384');
-        ecdh.setPrivateKey(this.#serverPrivateKey);
-
-        this.#sharedSecret = ecdh.computeSecret(this.#playerKey);
+        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey);
+        this.#secretKey = crypto.hash('sha256', Buffer.concat([ salt, this.#sharedSecret ]));
+        this.#cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey, this.#secretKey.slice(0, 16));
     }
 
     execute(command) {
