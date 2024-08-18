@@ -28,7 +28,7 @@ export class Client {
     }
 
     subscribeEvent(eventName) {
-        this.#ws.send(JSON.stringify(buildSubscription(eventName, crypto.randomUUID())));
+        this.#send(JSON.stringify(buildSubscription(eventName, crypto.randomUUID())));
     }
 
     async enableEncryption(salt) {
@@ -46,8 +46,9 @@ export class Client {
         });
         this.#playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
 
-        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey);
+        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey, 'base64');
         this.#secretKey = crypto.hash('sha256', Buffer.concat([ salt, this.#sharedSecret ]));
+        console.log('key length', this.#secretKey.length);
         this.#cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey, this.#secretKey.slice(0, 16));
     }
 
@@ -57,8 +58,19 @@ export class Client {
 
             this.#commandRequests[id] = (result) => resolve(result);
 
-            this.#ws.send(JSON.stringify(buildCommandRequest(command, id)));
+            this.#send(JSON.stringify(buildCommandRequest(command, id)));
         });
+    }
+
+    #send(data) {
+        if (this.#cipher) {
+            let message = cipher.update(data, 'utf8', 'hex');
+            message += cipher.final('hex');
+
+            this.#ws.send(message);
+        } else {
+            this.#ws.send(data);
+        }
     }
 
     #handleMessage(message) {
