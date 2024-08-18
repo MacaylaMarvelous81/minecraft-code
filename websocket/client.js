@@ -12,7 +12,6 @@ export class Client {
     #playerKey;
     #sharedSecret;
     #secretKey;
-    #cipher;
 
     constructor(ws, ecdh) {
         this.#ws = ws;
@@ -46,10 +45,8 @@ export class Client {
         });
         this.#playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
 
-        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey, 'base64');
+        this.#sharedSecret = this.#ecdh.computeSecret(this.#playerKey);
         this.#secretKey = crypto.hash('sha256', Buffer.concat([ salt, this.#sharedSecret ]));
-        console.log('key length', this.#secretKey.length);
-        this.#cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey, this.#secretKey.slice(0, 16));
     }
 
     execute(command) {
@@ -63,19 +60,33 @@ export class Client {
     }
 
     #send(data) {
-        if (this.#cipher) {
+        if (this.#secretKey) {
+            const cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey.slice(0, 32), this.#secretKey.slice(0, 16));
             let message = cipher.update(data, 'utf8', 'hex');
             message += cipher.final('hex');
 
-            this.#ws.send(message);
+            this.#ws.send(message, { binary: true });
+
+            console.log('a', message);
         } else {
             this.#ws.send(data);
+
+            console.log('b', data);
         }
     }
 
     #handleMessage(message) {
         try {
-            const data = JSON.parse(message);
+            let decryptedMessage = message;
+
+            if (this.#secretKey) {
+                const decipher = crypto.createDecipheriv('aes-256-cbc', this.#secretKey.slice(0, 32), this.#secretKey.slice(0, 16));
+                decryptedMessage = decipher.update(message, 'hex', 'utf8');
+                decryptedMessage += decipher.final('utf8');
+                console.log("decrypted message", decryptedMessage);
+            }
+
+            const data = JSON.parse(decryptedMessage);
 
             if (data?.header?.messagePurpose === 'commandResponse' && data?.header?.requestId in this.#commandRequests) {
                 this.#commandRequests[data?.header?.requestId](data?.body);
