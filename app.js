@@ -2,7 +2,6 @@ import getPort, { portNumbers } from 'get-port';
 import { WebSocketServer } from 'ws';
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'node:path'
-import crypto from 'node:crypto';
 import { Client } from './websocket/client.js';
 
 const port = await getPort({
@@ -14,10 +13,6 @@ const wss = new WebSocketServer({
         return protocols.has('com.microsoft.minecraft.wsencrypt') ? 'com.microsoft.minecraft.wsencrypt' : false;
     }
 });
-const ecdh = crypto.createECDH('secp384r1');
-ecdh.generateKeys();
-
-const salt = crypto.randomBytes(16);
 
 console.log(`Server started on port ${ port }`);
 
@@ -30,9 +25,9 @@ wss.on('connection', async (ws) => {
 
     sendAllRenderers('connection');
 
-    const client = new Client(ws, ecdh);
+    const client = new Client(ws);
 
-    await client.enableEncryption(salt);
+    await client.enableEncryption();
     client.subscribeEvent('PlayerDied');
     client.subscribeEvent('ItemUsed');
     client.subscribeEvent('PlayerMessage');

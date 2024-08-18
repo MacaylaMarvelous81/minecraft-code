@@ -2,19 +2,25 @@ import crypto from 'node:crypto';
 import { buildCommandRequest, buildSubscription } from './requests.js';
 import ecKeyUtils from 'eckey-utils';
 
+const asn1Header = Buffer.from("3076301006072a8648ce3d020106052b81040022036200", "hex");
+
 export class Client {
     static clients = [];
 
     #ws;
     #ecdh;
+    #publicKey;
+    #salt;
     #commandRequests = {};
     #gameEventHandlers = [];
     #cipher;
     #decipher;
 
-    constructor(ws, ecdh) {
+    constructor(ws) {
         this.#ws = ws;
-        this.#ecdh = ecdh;
+        this.#ecdh = crypto.createECDH('secp384r1');
+        this.#publicKey = this.#ecdh.generateKeys();
+        this.#salt = crypto.randomBytes(16);
 
         ws.on('message', this.#handleMessage.bind(this));
 
@@ -29,26 +35,18 @@ export class Client {
         this.#send(JSON.stringify(buildSubscription(eventName, crypto.randomUUID())));
     }
 
-    async enableEncryption(salt) {
-        const encodedKey = this.#ecdh.getPublicKey('base64');
-        const encodedSalt = salt.toString('base64');
+    async enableEncryption() {
+        const encodedKey = Buffer.concat([ asn1Header, this.#ecdh.getPublicKey() ]).toString('base64');
+        const encodedSalt = this.#salt.toString('base64');
         const body = await this.execute(`enableencryption "${ encodedKey }" "${ encodedSalt }"`);
 
-        const pemKey = crypto.createPublicKey({
-            key: Buffer.from(body.publicKey, 'base64'),
-            type: 'spki',
-            format: 'der'
-        }).export({
-            type: 'spki',
-            format: 'pem'
-        });
-        const playerKey = ecKeyUtils.parsePem(pemKey).publicKey;
+        const playerKey = Buffer.from(body.publicKey, 'base64').subarray(asn1Header.length);
 
         const sharedSecret = this.#ecdh.computeSecret(playerKey);
-        const secretKey = crypto.hash('sha256', Buffer.concat([ salt, sharedSecret ]), 'buffer');
+        const secretKey = crypto.hash('sha256', Buffer.concat([ this.#salt, sharedSecret ]), 'buffer');
 
-        this.#cipher = crypto.createCipheriv('aes-256-cfb', secretKey, secretKey.subarray(0, 16));
-        this.#decipher = crypto.createDecipheriv('aes-256-cfb', secretKey, secretKey.subarray(0, 16));
+        this.#cipher = crypto.createCipheriv('aes-256-cfb8', secretKey, secretKey.subarray(0, 16));
+        this.#decipher = crypto.createDecipheriv('aes-256-cfb8', secretKey, secretKey.subarray(0, 16));
         this.#cipher.setAutoPadding(false);
         this.#decipher.setAutoPadding(false);
     }
