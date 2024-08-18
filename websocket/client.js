@@ -12,8 +12,9 @@ export class Client {
     #salt;
     #commandRequests = {};
     #gameEventHandlers = [];
-    #cipher;
-    #decipher;
+    #secretKey;
+    #encryptIV;
+    #decryptIV;
 
     constructor(ws) {
         this.#ws = ws;
@@ -42,12 +43,12 @@ export class Client {
         const playerKey = Buffer.from(body.publicKey, 'base64').subarray(asn1Header.length);
 
         const sharedSecret = this.#ecdh.computeSecret(playerKey);
-        const secretKey = crypto.hash('sha256', Buffer.concat([ this.#salt, sharedSecret ]), 'buffer');
+        this.#secretKey = crypto.hash('sha256', Buffer.concat([ this.#salt, sharedSecret ]), 'buffer');
 
-        this.#cipher = crypto.createCipheriv('aes-256-cfb8', secretKey, secretKey.subarray(0, 16));
-        this.#decipher = crypto.createDecipheriv('aes-256-cfb8', secretKey, secretKey.subarray(0, 16));
-        this.#cipher.setAutoPadding(false);
-        this.#decipher.setAutoPadding(false);
+        this.#encryptIV = Buffer.alloc(16);
+        this.#decryptIV = Buffer.alloc(16);
+        this.#secretKey.copy(this.#encryptIV);
+        this.#secretKey.copy(this.#decryptIV);
     }
 
     execute(command) {
@@ -61,8 +62,21 @@ export class Client {
     }
 
     #send(message) {
-        if (this.#cipher) {
-            this.#ws.send(this.#cipher.update(message, 'utf8'));
+        if (this.#encryptIV) {
+            let encryptedMessage = Buffer.from(message, 'utf8');
+
+            const cipher = crypto.createCipheriv('aes-256-cbc', this.#secretKey, crypto.randomBytes(16));
+            let encryptedIV = cipher.update(this.#encryptIV);
+            encryptedIV += cipher.final();
+            this.#encryptIV = encryptedIV;
+
+            for (let i = 0; i < encryptedMessage.length; i++) {
+                encryptedMessage[i] ^= encryptedIV[i % encryptedIV.length];
+            }
+
+            console.log('Encrypted message:', encryptedMessage);
+
+            this.#ws.send(encryptedMessage);
         } else {
             this.#ws.send(message);
         }
@@ -72,9 +86,11 @@ export class Client {
         try {
             let decryptedMessage = message;
 
-            if (this.#decipher) {
+            /*
+            if (this.#decryptIV) {
                 decryptedMessage = this.#decipher.update(message).toString('utf8');
             }
+            */
 
             const data = JSON.parse(decryptedMessage);
 
