@@ -1,6 +1,5 @@
 import crypto from 'node:crypto';
 import { buildCommandRequest, buildSubscription } from './requests.js';
-import ecKeyUtils from 'eckey-utils';
 
 const asn1Header = Buffer.from("3076301006072a8648ce3d020106052b81040022036200", "hex");
 
