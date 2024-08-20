@@ -51,11 +51,14 @@ if (localStorage.getItem('workspace-default')) {
     }
 }
 
+let dirty = false;
+
 workspace.addChangeListener(Blockly.Events.disableOrphans);
 workspace.addChangeListener((event) => {
     if (event.isUiEvent) return;
 
     localStorage.setItem('workspace-default', JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
+    dirty = true;
 });
 
 const runButton = document.getElementById('run-button');
@@ -95,4 +98,9 @@ ${ genCode }\
 
         interpreter.run(code);
     });
+});
+
+const saveButton = document.getElementById('save-button');
+saveButton.addEventListener('click', (event) => {
+    system.saveFileUser();
 });

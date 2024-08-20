@@ -1,8 +1,9 @@
 import getPort, { portNumbers } from 'get-port';
 import { WebSocketServer } from 'ws';
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain, dialog } from 'electron';
 import path from 'node:path'
 import { Client } from './websocket/client.js';
+import fs from 'node:fs/promises';
 
 const port = await getPort({
     port: portNumbers(49152, 65535)
@@ -65,4 +66,12 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle('request-port', (event) => port);
+
+    ipcMain.handle('save-file-user', async (event, data) => {
+        const result = await dialog.showSaveDialog(window, {
+            title: 'Save To'
+        });
+
+        if (result.canceled) return;
+    });
 });

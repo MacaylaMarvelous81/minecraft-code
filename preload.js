@@ -1,5 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+contextBridge.exposeInMainWorld('system', {
+    saveFileUser: (data) => ipcRenderer.invoke('save-file-user', data)
+});
+
 contextBridge.exposeInMainWorld('wsserver', {
     getPort: () => ipcRenderer.invoke('request-port'),
     onConnection: (callback) => ipcRenderer.on('connection', (event) => callback())
