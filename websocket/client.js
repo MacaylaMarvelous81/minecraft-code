@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { buildCommandRequest, buildSubscription } from './requests.js';
 import aesjs from 'aes-js';
 
+// From mcpews (MIT license) (https://github.com/mcpews/mcpews) Thanks!!
 const asn1Header = Buffer.from("3076301006072a8648ce3d020106052b81040022036200", "hex");
 
 export class Client {
@@ -14,8 +15,9 @@ export class Client {
     #commandRequests = {};
     #gameEventHandlers = [];
     #secretKey;
-    #encryptIV;
-    #decryptIV;
+    #cipher;
+    #decipher;
+    #exchangeLock = Promise.resolve();
 
     constructor(ws) {
         this.#ws = ws;
@@ -37,6 +39,9 @@ export class Client {
     }
 
     async enableEncryption() {
+        let closeLock = () => {};
+        this.#exchangeLock = new Promise((resolve) => closeLock = resolve);
+
         const encodedKey = Buffer.concat([ asn1Header, this.#ecdh.getPublicKey() ]).toString('base64');
         const encodedSalt = this.#salt.toString('base64');
         const body = await this.execute(`enableencryption "${ encodedKey }" "${ encodedSalt }"`);
@@ -46,10 +51,13 @@ export class Client {
         const sharedSecret = this.#ecdh.computeSecret(playerKey);
         this.#secretKey = crypto.hash('sha256', Buffer.concat([ this.#salt, sharedSecret ]), 'buffer');
 
-        this.#encryptIV = Buffer.alloc(16);
-        this.#decryptIV = Buffer.alloc(16);
-        this.#secretKey.copy(this.#encryptIV);
-        this.#secretKey.copy(this.#decryptIV);
+        const encryptIV = Buffer.copyBytesFrom(this.#secretKey, 0, 16);
+        const decryptIV = Buffer.copyBytesFrom(this.#secretKey, 0, 16);
+
+        this.#cipher = new aesjs.ModeOfOperation.cfb(this.#secretKey, encryptIV, 1);
+        this.#decipher = new aesjs.ModeOfOperation.cfb(this.#secretKey, decryptIV, 1);
+
+        closeLock();
     }
 
     execute(command) {
@@ -63,22 +71,10 @@ export class Client {
     }
 
     #send(message) {
-        if (this.#encryptIV) {
-            let messageBytes = aesjs.utils.utf8.toBytes(message);
-            if (messageBytes.length % 8 !== 0) {
-                const padding = 8 - (messageBytes.length % 8);
+        if (this.#cipher) {
+            const messageBytes = aesjs.utils.utf8.toBytes(message);
 
-                const paddedMessage = new Uint8Array(messageBytes.length + padding);
-                paddedMessage.set(messageBytes);
-                paddedMessage.fill(0, messageBytes.length, messageBytes.length + padding);
-
-                messageBytes = paddedMessage;
-            }
-
-            const cipher = new aesjs.ModeOfOperation.cfb(this.#secretKey, this.#encryptIV, 8);
-            const encryptedMessage = cipher.encrypt(messageBytes);
-
-            console.log(aesjs.utils.hex.fromBytes(encryptedMessage));
+            const encryptedMessage = this.#cipher.encrypt(messageBytes);
 
             this.#ws.send(encryptedMessage);
         } else {
@@ -86,29 +82,30 @@ export class Client {
         }
     }
 
-    #handleMessage(message) {
+    async #handleMessage(message) {
+        let data;
+
         try {
-            let decryptedMessage = message;
-
-            /*
-            if (this.#decryptIV) {
-                decryptedMessage = this.#decipher.update(message).toString('utf8');
-            }
-            */
-
-            const data = JSON.parse(decryptedMessage);
-
-            if (data?.header?.messagePurpose === 'commandResponse' && data?.header?.requestId in this.#commandRequests) {
-                this.#commandRequests[data?.header?.requestId](data?.body);
-
-                delete this.#commandRequests[data?.header?.requestId];
-            } else if (data?.header?.messagePurpose === 'event') {
-                this.#gameEventHandlers.forEach((handler) => handler(data?.header?.eventName), data?.body);
-            }
+            data = JSON.parse(message);
         } catch (err) {
-            if (err instanceof SyntaxError) console.warn('Ignoring message with invalid syntax.', message);
+            if (err instanceof SyntaxError) {
+                // This may be an encrypted message!
+                if (!this.#decipher) await this.#exchangeLock;
 
-            console.error('Unknown error occurred handling a message.', err);
+                // This should just throw if it isn't able to be decrypted, since it won't be valid JSON.
+                data = JSON.parse(aesjs.utils.utf8.fromBytes(this.#decipher.decrypt(message)));
+            } else {
+                // If it's not a SyntaxError then it's not from JSON.parse and IDK what it is.
+                throw err;
+            }
+        }
+
+        if (data?.header?.messagePurpose === 'commandResponse' && data?.header?.requestId in this.#commandRequests) {
+            this.#commandRequests[data?.header?.requestId](data?.body);
+
+            delete this.#commandRequests[data?.header?.requestId];
+        } else if (data?.header?.messagePurpose === 'event') {
+            this.#gameEventHandlers.forEach((handler) => handler(data?.header?.eventName), data?.body);
         }
     }
 }
