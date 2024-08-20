@@ -28,6 +28,9 @@ wss.on('connection', async (ws) => {
     const client = new Client(ws);
 
     await client.enableEncryption();
+
+    client.onGameEvent((name, body) => sendAllRenderers(`event:${ name }`, body));
+
     client.subscribeEvent('PlayerDied');
     client.subscribeEvent('ItemUsed');
     client.subscribeEvent('PlayerMessage');

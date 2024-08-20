@@ -105,7 +105,7 @@ export class Client {
 
             delete this.#commandRequests[data?.header?.requestId];
         } else if (data?.header?.messagePurpose === 'event') {
-            this.#gameEventHandlers.forEach((handler) => handler(data?.header?.eventName), data?.body);
+            this.#gameEventHandlers.forEach((handler) => handler(data?.header?.eventName, data?.body));
         }
     }
 }
