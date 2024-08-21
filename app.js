@@ -68,12 +68,43 @@ app.whenReady().then(() => {
     ipcMain.handle('request-port', (event) => port);
 
     ipcMain.handle('save-file-user', async (event, data) => {
+        // Maybe have options provided by renderer so this is generic if necessary.
         const result = await dialog.showSaveDialog(window, {
-            title: 'Save To'
+            title: 'Save To',
+            filters: [
+                {
+                    name: 'JSON File',
+                    extensions: [ 'json' ]
+                }
+            ]
         });
 
         if (result.canceled) return;
 
-        await fs.writeFile(result.filePath, data);
+        await fs.writeFile(result.filePath, data, {
+            encoding: 'utf8'
+        });
+    });
+
+    ipcMain.handle('load-file-user', async (event) => {
+        const result = await dialog.showOpenDialog(window, {
+            title: 'Open From',
+            filters: [
+                {
+                    name: 'JSON File',
+                    extensions: [ 'json' ]
+                }
+            ],
+            properties: [ 'openFile' ]
+        });
+
+        const path = result.filePaths[0];
+
+        // This should never happen because the multiSelections property is not set.
+        if (result.filePaths.length > 1) console.warn('Multiple files selected?! This is unexpected behavior.');
+
+        return await fs.readFile(path, {
+            encoding: 'utf8'
+        });
     });
 });

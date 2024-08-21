@@ -1,7 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('system', {
-    saveFileUser: (data) => ipcRenderer.invoke('save-file-user', data)
+    saveFileUser: (data) => ipcRenderer.invoke('save-file-user', data),
+    loadFileUser: () => ipcRenderer.invoke('load-file-user')
 });
 
 contextBridge.exposeInMainWorld('wsserver', {

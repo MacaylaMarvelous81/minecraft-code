@@ -104,3 +104,20 @@ const saveButton = document.getElementById('save-button');
 saveButton.addEventListener('click', (event) => {
     system.saveFileUser(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
 });
+
+const openButton = document.getElementById('open-button');
+openButton.addEventListener('click', (event) => {
+    system.loadFileUser().then((data) => {
+        try {
+            const workspaceData = JSON.parse(data);
+
+            console.log(workspaceData);
+
+            Blockly.serialization.workspaces.load(workspaceData);
+        } catch(err) {
+            if (err instanceof SyntaxError) return vex.dialog.alert('The selected file couldn\'t be loaded because it\'s not a valid JSON file.');
+
+            throw err;
+        }
+    });
+});
