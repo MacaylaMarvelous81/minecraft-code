@@ -4,6 +4,8 @@ Minecraft Code Connection.
 **NOT AN OFFICIAL MINECRAFT PROGRAM. NOT APPROVED BY OR ASSOCIATED WITH
 MOJANG OR MICROSOFT.**
 
+![A diagram of how Block Coding for Minecraft works.](https://cloud-lmt2liw44-hack-club-bot.vercel.app/0mccode-diagram.png)
+
 ## References
 These resources aided in the development of this project by shedding light on
 how the Minecraft features utilized in this project work! Thank you very much!

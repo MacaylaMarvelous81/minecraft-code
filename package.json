@@ -1,7 +1,7 @@
 {
 	"name": "block-coding-for-minecraft",
 	"description": "Block-based visual coding via Blockly for Minecraft: Bedrock Edition",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"license": "MIT",
 	"author": {
 		"name": "Jomar Milan",
