@@ -113,7 +113,7 @@ openButton.addEventListener('click', (event) => {
 
             console.log(workspaceData);
 
-            Blockly.serialization.workspaces.load(workspaceData);
+            Blockly.serialization.workspaces.load(workspaceData, workspace);
         } catch(err) {
             if (err instanceof SyntaxError) return vex.dialog.alert('The selected file couldn\'t be loaded because it\'s not a valid JSON file.');
 
