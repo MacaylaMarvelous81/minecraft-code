@@ -102,5 +102,5 @@ ${ genCode }\
 
 const saveButton = document.getElementById('save-button');
 saveButton.addEventListener('click', (event) => {
-    system.saveFileUser();
+    system.saveFileUser(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
 });

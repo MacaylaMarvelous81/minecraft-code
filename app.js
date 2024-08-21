@@ -73,5 +73,7 @@ app.whenReady().then(() => {
         });
 
         if (result.canceled) return;
+
+        await fs.writeFile(result.filePath, data);
     });
 });
