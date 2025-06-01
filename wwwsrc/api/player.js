@@ -1,17 +1,19 @@
-export const player = {
-    itemAmountUsed: 0,
-    itemId: '',
-    message: '',
+export class PlayerApi {
+    itemAmountUsed = 0;
+    itemId = '';
+    message = '';
 
     teleport(position) {
         return minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
-    },
+    }
+
     async getPosition() {
         const body = await minecraft.runCommand('querytarget @s');
         const playerDetails = JSON.parse(body.details)[0];
 
         return playerDetails.position;
-    },
+    }
+
     on(eventName, callback) {
         switch (eventName) {
             case 'die':

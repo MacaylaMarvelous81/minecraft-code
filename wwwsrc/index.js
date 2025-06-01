@@ -9,9 +9,9 @@ import { javascriptGenerator } from 'blockly/javascript';
 import { javascriptBlocks } from './generators/javascript.js';
 import { toolbox } from './toolbox.js';
 import Sval from 'sval';
-import { agent } from './api/agent.js';
-import { player } from './api/player.js';
-import { lifecycle } from './api/lifecycle.js';
+import { AgentApi } from './api/agent.js';
+import { PlayerApi } from './api/player.js';
+import { LifecycleApi } from './api/lifecycle.js';
 import './index.css';
 import 'vex-js/dist/css/vex.css';
 import 'vex-js/dist/css/vex-theme-default.css';
@@ -93,6 +93,10 @@ ${ genCode }\
         // Top-level await works in the module type.
         const interpreter = new Sval({ sourceType: 'module' });
 
+        const agent = new AgentApi();
+        const player = new PlayerApi();
+        const lifecycle = new LifecycleApi();
+
         interpreter.import('agent', { agent });
         interpreter.import('player', { player });
         interpreter.import('lifecycle', { lifecycle });
@@ -100,8 +104,7 @@ ${ genCode }\
         minecraft.resetEventListeners();
 
         interpreter.run(code);
-
-        lifecycle.entrypoints.forEach((callback) => callback());
+        lifecycle.fire('run');
     });
 });
 
