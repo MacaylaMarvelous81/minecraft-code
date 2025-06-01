@@ -1,41 +1,45 @@
 export const agent = {
     teleport(position) {
-        minecraft.runCommand(`agent tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
+        return minecraft.runCommand(`agent tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
     },
-    getPosition() {
-        return minecraft.runCommandWithResponse('agent getposition');
+    async getPosition() {
+        return await minecraft.runCommand('agent getposition');
     },
     move(direction, blocks) {
+        let commands = [];
+
         for (let i = 0; i < blocks; i++) {
-            minecraft.runCommand(`agent move ${ direction }`);
+            commands.push(minecraft.runCommand(`agent move ${ direction }`));
         }
+
+        return Promise.all(commands);
     },
     turn(direction) {
-        minecraft.runCommand(`agent turn ${ direction }`);
+        return minecraft.runCommand(`agent turn ${ direction }`);
     },
     attack(direction) {
-        minecraft.runCommand(`agent attack ${ direction }`);
+        return minecraft.runCommand(`agent attack ${ direction }`);
     },
     destroy(direction) {
-        minecraft.runCommand(`agent destroy ${ direction }`);
+        return minecraft.runCommand(`agent destroy ${ direction }`);
     },
     drop(slot, amount, direction) {
         if (slot === null) {
-            minecraft.runCommand(`agent dropall ${ direction }`);
+            return minecraft.runCommand(`agent dropall ${ direction }`);
         } else {
-            minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
+            return minecraft.runCommand(`agent drop ${ slot } ${ amount } ${ direction }`);
         }
     },
     build(slot, direction) {
-        minecraft.runCommand(`agent place ${ slot } ${ direction }`);
+        return minecraft.runCommand(`agent place ${ slot } ${ direction }`);
     },
     till(direction) {
-        minecraft.runCommand(`agent till ${ direction }`);
+        return minecraft.runCommand(`agent till ${ direction }`);
     },
     collect(id) {
-        minecraft.runCommand(`agent collect ${ id }`);
+        return minecraft.runCommand(`agent collect ${ id }`);
     },
     transfer(srcSlotNum, quantity, dstSlotNum) {
-        minecraft.runCommand(`agent transfer ${ srcSlotNum } ${ quantity } ${ dstSlotNum }`);
+        return minecraft.runCommand(`agent transfer ${ srcSlotNum } ${ quantity } ${ dstSlotNum }`);
     }
 };

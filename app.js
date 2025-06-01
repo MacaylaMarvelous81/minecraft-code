@@ -48,21 +48,9 @@ app.whenReady().then(() => {
 
     window.loadFile(path.resolve(import.meta.dirname, 'wwwdist/index.html'));
 
-    ipcMain.on('command', (event, command) => {
-        Client.clients.forEach((client) => {
-            client.execute(command);
-        });
-    });
-
     // TODO: handle multiple clients
-    ipcMain.handle('command-with-response', (event, command) => {
+    ipcMain.handle('command', (event, command) => {
         return Client.clients[0].execute(command);
-    });
-
-    // same as above but synchronously
-    ipcMain.on('command-with-response', async (event, command) => {
-        // I don't know why Electron doesn't like it if I send over the original Promise.
-        event.returnValue = await Client.clients[0].execute(command);
     });
 
     ipcMain.handle('request-port', (event) => port);

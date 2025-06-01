@@ -11,6 +11,7 @@ import { toolbox } from './toolbox.js';
 import Sval from 'sval';
 import { agent } from './api/agent.js';
 import { player } from './api/player.js';
+import { lifecycle } from './api/lifecycle.js';
 import './index.css';
 import 'vex-js/dist/css/vex.css';
 import 'vex-js/dist/css/vex-theme-default.css';
@@ -83,6 +84,7 @@ wsserver.onConnection(() => {
         const code = `\
 import { agent } from 'agent';
 import { player } from 'player';
+import { lifecycle } from 'lifecycle';
 
 ${ genCode }\
 `;
@@ -93,10 +95,13 @@ ${ genCode }\
 
         interpreter.import('agent', { agent });
         interpreter.import('player', { player });
+        interpreter.import('lifecycle', { lifecycle });
 
         minecraft.resetEventListeners();
 
         interpreter.run(code);
+
+        lifecycle.entrypoints.forEach((callback) => callback());
     });
 });
 

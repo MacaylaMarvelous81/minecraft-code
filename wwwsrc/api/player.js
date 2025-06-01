@@ -4,10 +4,10 @@ export const player = {
     message: '',
 
     teleport(position) {
-        minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
+        return minecraft.runCommand(`tp ${ position.x || '~' } ${ position.y || '~' } ${ position.z || '~' }`);
     },
-    getPosition() {
-        const body = minecraft.runCommandWithResponse('querytarget @s');
+    async getPosition() {
+        const body = await minecraft.runCommand('querytarget @s');
         const playerDetails = JSON.parse(body.details)[0];
 
         return playerDetails.position;
@@ -32,9 +32,6 @@ export const player = {
                     callback();
                 });
                 break;
-        }
-        if (eventName === 'die') {
-            minecraft.onPlayerDied(callback);
         }
     }
 };

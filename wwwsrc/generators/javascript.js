@@ -12,8 +12,9 @@ export const javascriptBlocks = {
         return [ `{ x: ${ x || 'null' }, y: ${ y || 'null' }, z: ${ z || 'null' } }`, Order.NONE ];
     },
     lifecycle_run(block, generator) {
-        // Code inserted at top level
-        return generator.statementToCode(block, 'DO');
+        const code = generator.statementToCode(block, 'DO');
+
+        return `lifecycle.on('run', async () => {\n${ code }\n});\n`;
     },
     math_coordinate_value(block, generator) {
         const axis = block.getFieldValue('AXIS');
@@ -24,87 +25,87 @@ export const javascriptBlocks = {
     agent_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
-        return `agent.teleport(${ position });\n`;
+        return `await agent.teleport(${ position });\n`;
     },
     agent_position(block, generator) {
-        return [ 'agent.getPosition()', Order.FUNCTION_CALL ];
+        return [ 'await agent.getPosition()', Order.FUNCTION_CALL ];
     },
     agent_move(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
         const blocks = generator.valueToCode(block, 'BLOCKS', Order.NONE);
 
-        return `agent.move('${ direction }', ${ blocks });\n`;
+        return `await agent.move('${ direction }', ${ blocks });\n`;
     },
     agent_turn(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.turn('${ direction }');\n`;
+        return `await agent.turn('${ direction }');\n`;
     },
     agent_attack(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.attack('${ direction }');\n`;
+        return `await agent.attack('${ direction }');\n`;
     },
     agent_destroy(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.destroy('${ direction }');\n`;
+        return `await agent.destroy('${ direction }');\n`;
     },
     agent_drop(block, generator) {
         const amount = generator.valueToCode(block, 'AMOUNT', Order.NONE);
         const slot = generator.valueToCode(block, 'SLOT', Order.NONE);
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
+        return `await agent.drop(${ slot }, ${ amount }, '${ direction }');\n`;
     },
     agent_drop_all(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.drop(null, null, '${ direction }');\n`;
+        return `await agent.drop(null, null, '${ direction }');\n`;
     },
     agent_build(block, generator) {
         const slot = generator.valueToCode(block, 'SLOT', Order.NONE);
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.build(${ slot }, '${ direction }');\n`;
+        return `await agent.build(${ slot }, '${ direction }');\n`;
     },
     agent_till(block, generator) {
         const direction = block.getFieldValue('DIRECTION');
 
-        return `agent.till('${ direction }');\n`;
+        return `await agent.till('${ direction }');\n`;
     },
     agent_collect(block, generator) {
-        return 'agent.collect(\'all\');\n';
+        return 'await agent.collect(\'all\');\n';
     },
     agent_collect_specify(block, generator) {
         const item = generator.valueToCode(block, 'ITEM', Order.NONE);
 
-        return `agent.collect(${ item });\n`;
+        return `await agent.collect(${ item });\n`;
     },
     agent_transfer(block, generator) {
         const amount = generator.valueToCode(block, 'AMOUNT', Order.NONE);
         const fromSlot = generator.valueToCode(block, 'FROM', Order.NONE);
         const toSlot = generator.valueToCode(block, 'TO', Order.NONE);
 
-        return `agent.transfer(${ fromSlot }, ${ amount }, ${ toSlot });\n`;
+        return `await agent.transfer(${ fromSlot }, ${ amount }, ${ toSlot });\n`;
     },
     player_died(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
-        return `player.on('die', () => {\n${ code }\n});\n`;
+        return `player.on('die', async () => {\n${ code }\n});\n`;
     },
     player_teleport(block, generator) {
         const position = generator.valueToCode(block, 'POSITION', Order.NONE);
 
-        return `player.teleport(${ position });\n`;
+        return `await player.teleport(${ position });\n`;
     },
     player_position(block, generator) {
-        return [ 'player.getPosition()', Order.FUNCTION_CALL ];
+        return [ 'await player.getPosition()', Order.FUNCTION_CALL ];
     },
     player_used_item(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
-        return `player.on('useItem', () => {\n${ code }\n});\n`;
+        return `player.on('useItem', async () => {\n${ code }\n});\n`;
     },
     player_used_item_count(block, generator) {
         return [ 'player.itemAmountUsed', Order.MEMBER ];
@@ -115,7 +116,7 @@ export const javascriptBlocks = {
     player_chat(block, generator) {
         const code = generator.statementToCode(block, 'DO');
 
-        return `player.on('chat', () => {\n${ code }\n});\n`;
+        return `player.on('chat', async () => {\n${ code }\n});\n`;
     },
     player_chat_message(block, generator) {
         return [ 'player.message', Order.MEMBER ];

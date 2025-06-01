@@ -11,8 +11,7 @@ contextBridge.exposeInMainWorld('wsserver', {
 });
 
 contextBridge.exposeInMainWorld('minecraft', {
-    runCommand: (command) => ipcRenderer.send('command', command),
-    runCommandWithResponse: (command) => ipcRenderer.sendSync('command-with-response', command),
+    runCommand: (command) => ipcRenderer.invoke('command', command),
     resetEventListeners: () => {
         ipcRenderer.eventNames().forEach((name) => {
             if (name.substring(0, 6) === 'event:') {
